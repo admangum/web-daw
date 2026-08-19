@@ -4,6 +4,7 @@ export interface TrackData {
   volume: number;
   muted: boolean;
   soloed: boolean;
+  instrumentId: string;
 }
 
 export interface ClipData {

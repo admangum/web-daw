@@ -1,6 +1,5 @@
-import type { MouseEvent } from "react";
 import { useShallow } from "zustand/react/shallow";
-import { addClipAt, removeClip } from "../engine/sync";
+import { removeClip } from "../engine/sync";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
 import type { TrackData } from "../stores/types";
@@ -8,13 +7,18 @@ import type { TrackData } from "../stores/types";
 export const TIMELINE_WIDTH_SECONDS = 60;
 
 export function TrackLane({ track }: { track: TrackData }) {
-  const pixelsPerSecond = useUIStore((s) => s.pixelsPerSecond);
+  const { pixelsPerSecond, selectTrack, selectedTrackId } = useUIStore();
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
 
-  function handleLaneClick(event: MouseEvent<HTMLDivElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    addClipAt(track.id, x / pixelsPerSecond);
+  function handleLaneClick() {
+    if (selectedTrackId === track.id) {
+      selectTrack(null);
+    } else {
+      selectTrack(track.id);
+    }
+    // const rect = event.currentTarget.getBoundingClientRect();
+    // const x = event.clientX - rect.left;
+    // addClipAt(track.id, x / pixelsPerSecond);
   }
 
   return (

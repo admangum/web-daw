@@ -1,5 +1,6 @@
 import { Timeline } from "./components/Timeline";
 import { TimeRulerSpacer } from "./components/TimeRulerSpacer";
+import { TrackEditor } from "./components/TrackEditor";
 import { TrackHeader } from "./components/TrackHeader";
 import { TransportBar } from "./components/TransportBar";
 import { useProjectStore } from "./stores/useProjectStore";
@@ -23,6 +24,7 @@ function App() {
         </div>
         <Timeline />
       </div>
+      <TrackEditor />
     </div>
   );
 }

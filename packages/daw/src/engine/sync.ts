@@ -5,6 +5,7 @@ import { createDemoClipBuffer } from "./synth";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, TrackData } from "../stores/types";
+import { DEFAULT_INSTRUMENT_ID } from "../instruments/catalog";
 
 /**
  * The only module allowed to translate between useProjectStore's plain
@@ -35,7 +36,14 @@ function pushClipsToEngine(): void {
 
 export function addTrack(name: string): void {
   const id = crypto.randomUUID();
-  const track: TrackData = { id, name, volume: 1, muted: false, soloed: false };
+  const track: TrackData = {
+    id,
+    name,
+    volume: 1,
+    muted: false,
+    soloed: false,
+    instrumentId: DEFAULT_INSTRUMENT_ID,
+  };
   engine.addTrack({ id, name, volume: track.volume });
   useProjectStore.getState().addTrack(track);
 }
@@ -60,6 +68,10 @@ export function setTrackMuted(id: string, muted: boolean): void {
 export function setTrackSoloed(id: string, soloed: boolean): void {
   engine.mixer.setSoloed(id, soloed);
   useProjectStore.getState().updateTrack(id, { soloed });
+}
+
+export function setTrackInstrument(id: string, instrumentId: string): void {
+  useProjectStore.getState().updateTrack(id, { instrumentId });
 }
 
 export function addClipAt(trackId: string, startTime: number): void {
