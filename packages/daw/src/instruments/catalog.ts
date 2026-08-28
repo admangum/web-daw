@@ -1,11 +1,20 @@
-export type InstrumentKind = "sample" | "oscillator";
+import type { InstrumentDefinition } from "audio-engine";
+import DrumKitA from "./drum-machine/kit-a";
 
-export interface InstrumentDefinition {
-  id: string;
-  name: string;
-  kind: InstrumentKind;
-}
+export const INSTRUMENTS: [string, InstrumentDefinition][] = [
+  ["none", {} as any],
+  [
+    "drum-machine",
+    {
+      name: "Drum Machine",
+      kind: "sampler",
+      options: {
+        sampleURLMap: DrumKitA,
+      },
+    },
+  ],
+];
 
-export const INSTRUMENTS: InstrumentDefinition[] = [{ id: "drum-machine", name: "Drum Machine", kind: "sample" }];
+export const INSTRUMENT_MAP: Map<string, InstrumentDefinition> = new Map(INSTRUMENTS);
 
-export const DEFAULT_INSTRUMENT_ID = INSTRUMENTS[0].id;
+export const DEFAULT_INSTRUMENT_ID = INSTRUMENTS[0][0];

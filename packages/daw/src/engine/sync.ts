@@ -1,11 +1,11 @@
-import { Clip } from "audio-engine";
+import { Clip, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
 import { getBuffer, registerBuffer } from "./bufferCache";
 import { createDemoClipBuffer } from "./synth";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, TrackData } from "../stores/types";
-import { DEFAULT_INSTRUMENT_ID } from "../instruments/catalog";
+import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
 
 /**
  * The only module allowed to translate between useProjectStore's plain
@@ -72,6 +72,16 @@ export function setTrackSoloed(id: string, soloed: boolean): void {
 
 export function setTrackInstrument(id: string, instrumentId: string): void {
   useProjectStore.getState().updateTrack(id, { instrumentId });
+  const track = engine.getTrack(id);
+  const instrumentDef = INSTRUMENT_MAP.get(instrumentId);
+  if (instrumentDef && track) {
+    track?.setInstrument(instrumentDef);
+  }
+}
+
+export function playTrackInstrument(id: string, note: PitchNotation): void {
+  const track = engine.getTrack(id);
+  track?.playInstrument(note);
 }
 
 export function addClipAt(trackId: string, startTime: number): void {

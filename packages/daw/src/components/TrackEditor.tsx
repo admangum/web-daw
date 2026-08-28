@@ -1,5 +1,6 @@
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
+import { Instrument } from "./track/Instrument";
 import { InstrumentSelector } from "./track/InstrumentSelector";
 
 export function TrackEditor() {
@@ -11,6 +12,7 @@ export function TrackEditor() {
   return (
     <div className="flex h-56 shrink-0 items-start gap-2 border-t border-neutral-800 p-3">
       <InstrumentSelector trackId={track.id} instrumentId={track.instrumentId} />
+      <Instrument trackId={track.id} />
     </div>
   );
 }

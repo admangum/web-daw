@@ -13,3 +13,4 @@ export { AudioSource } from "./track/sources/AudioSource";
 export { AudioEffect, GainEffect, PanEffect, FilterEffect } from "./track/effects";
 export { Clip, type ClipOptions } from "./timeline/Clip";
 export { Scheduler } from "./timeline/Scheduler";
+export type { InstrumentDefinition, PitchNotation } from "./instruments/types";
