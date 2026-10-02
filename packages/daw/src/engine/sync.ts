@@ -6,6 +6,7 @@ import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, TrackData } from "../stores/types";
 import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
+import { useModalStore } from "../stores/useModalStore";
 
 /**
  * The only module allowed to translate between useProjectStore's plain
@@ -46,6 +47,7 @@ export function addTrack(name: string): void {
   };
   engine.addTrack({ id, name, volume: track.volume });
   useProjectStore.getState().addTrack(track);
+  useModalStore.getState().popModal;
 }
 
 export function removeTrack(id: string): void {

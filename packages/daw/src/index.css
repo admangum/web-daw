@@ -3,4 +3,5 @@
 body {
   margin: 0;
   color-scheme: light dark;
+  color: var(--color-neutral-200);
 }

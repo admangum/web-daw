@@ -2,15 +2,32 @@ import type { InstrumentDefinition } from "audio-engine";
 import DrumKitA from "./drum-machine/kit-a";
 
 export const INSTRUMENTS: [string, InstrumentDefinition][] = [
-  ["none", {} as any],
   [
-    "drum-machine",
+    "drum-kit-alpha",
     {
-      name: "Drum Machine",
+      name: "Drum Kit Alpha",
       kind: "sampler",
       options: {
         sampleURLMap: DrumKitA,
       },
+    },
+  ],
+  [
+    "drum-kit-beta",
+    {
+      name: "Drum Kit Beta",
+      kind: "sampler",
+      options: {
+        sampleURLMap: DrumKitA,
+      },
+    },
+  ],
+  [
+    "synth-gamma",
+    {
+      name: "Synth Gamma",
+      kind: "synth",
+      options: {},
     },
   ],
 ];
