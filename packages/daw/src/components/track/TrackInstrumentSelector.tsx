@@ -32,7 +32,7 @@ export function TrackInstrumentSelector({ track }: Props) {
   //     onChange={(e) => {
   //       setTrackInstrument(trackId, e.target.value);
   //     }}
-  //     className="rounded bg-neutral-800 px-2 py-1 text-xs text-neutral-200"
+  //     className="rounded bg-slate-800 px-2 py-1 text-xs text-slate-200"
   //   >
   //     {INSTRUMENTS.map(([id, instrument]) => (
   //       <option key={id} value={id}>

@@ -9,6 +9,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@/ui": path.resolve(import.meta.dirname, "./src/ui/index"),
+      "@/ui/icons": path.resolve(import.meta.dirname, "./src/ui/icons/index"),
+      "@/util": path.resolve(import.meta.dirname, "./src/util"),
     },
   },
 });

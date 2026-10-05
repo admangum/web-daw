@@ -1,7 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-slate-1000: oklch(0.0992 0.0419 264.78);
+}
+
 body {
   margin: 0;
   color-scheme: light dark;
-  color: var(--color-neutral-200);
+  color: var(--color-slate-200);
+  stroke-color: var(--color-slate-200);
+  fill: var(--color-slate-200);
+}
+
+.size-icon {
+  width: calc(var(--spacing) * 10);
+  height: calc(var(--spacing) * 10);
 }

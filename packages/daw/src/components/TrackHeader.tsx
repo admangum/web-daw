@@ -16,27 +16,29 @@ export function TrackHeader({ track, ...props }: Props) {
     } else {
       selectTrack(track.id);
     }
-  }, [track]);
+  }, [track, selectedTrackId]);
 
   const onDoubleClick = React.useCallback(() => {
     openTrackSettings(track.id);
   }, []);
 
+  const bg = selectedTrackId === track.id ? "bg-slate-900" : "bg-transparent";
+
   return (
     <div
       {...props}
-      className="flex flex-col gap-2 h-18 border-b border-neutral-800 p-2"
+      className={`flex flex-col gap-2 h-18 shrink-0 border-b border-slate-800 ${bg} p-2`}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
     >
-      <div className="flex-1 truncate text-xs text-neutral-400">{track.name}</div>
+      <div className="flex-1 truncate text-xs text-slate-400">{track.name}</div>
       <div className="flex shrink-0 items-center gap-2">
         <TrackInstrumentSelector track={track} />
         <button
           type="button"
           onClick={() => setTrackMuted(track.id, !track.muted)}
           className={`rounded-full px-2 py-1 text-xs font-medium ${
-            track.muted ? "bg-red-600 text-white" : "bg-neutral-800 text-neutral-400"
+            track.muted ? "bg-red-600 text-white" : "bg-slate-800 text-slate-400"
           }`}
         >
           M
@@ -45,7 +47,7 @@ export function TrackHeader({ track, ...props }: Props) {
           type="button"
           onClick={() => setTrackSoloed(track.id, !track.soloed)}
           className={`rounded-full px-2 py-1 text-xs font-medium ${
-            track.soloed ? "bg-yellow-500 text-black" : "bg-neutral-800 text-neutral-400"
+            track.soloed ? "bg-yellow-500 text-black" : "bg-slate-800 text-slate-400"
           }`}
         >
           S

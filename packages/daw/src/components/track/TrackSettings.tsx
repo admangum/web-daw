@@ -18,7 +18,7 @@ export function TrackSettings() {
   // return (
   // <Dialog title="Track settings" open={isOpen} onOpenChange={onOpenChange}>
   //   {track ? (
-  //     <div className="flex h-56 shrink-0 items-start gap-2 border-t border-neutral-800 p-3">
+  //     <div className="flex h-56 shrink-0 items-start gap-2 border-t border-slate-800 p-3">
   //       Track settings (WIP)
   //     </div>
   //   ) : (

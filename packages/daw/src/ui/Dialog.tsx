@@ -25,7 +25,7 @@ import { cx } from "../util";
 //       </D.Trigger>
 //       <D.Portal>
 //         <D.Overlay className="fixed" />
-//         <D.Content className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-md max-h-[70vh] overflow-y-auto border-2 border-indigo-500/75 bg-neutral-900 p-4">
+//         <D.Content className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-md max-h-[70vh] overflow-y-auto border-2 border-indigo-500/75 bg-slate-900 p-4">
 //           <D.Title className="text-lg mb-2">{title}</D.Title>
 //           {description && <D.Description className="text-sm mb-3">{description}</D.Description>}
 //           {children}
@@ -37,7 +37,7 @@ import { cx } from "../util";
 interface Props extends React.ComponentPropsWithRef<"div"> {}
 export function DialogContent({ children, ref, className, ...props }: PropsWithChildren<Props>) {
   const classNames = cx(
-    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto bg-neutral-900",
+    "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 overflow-y-auto bg-slate-900",
     className
   );
   return (

@@ -1,12 +1,18 @@
 import React from "react";
+import { cx } from "../util";
 
-interface Props extends React.ComponentPropsWithRef<"button"> {}
-export function Button({ children, ref, ...rest }: React.PropsWithChildren<Props>) {
+interface Props extends React.ComponentPropsWithRef<"button"> {
+  className?: string;
+}
+export function Button({ children, ref, className, ...props }: React.PropsWithChildren<Props>) {
   return (
     <button
-      className="rounded bg-neutral-800 px-4 py-1.5 text-sm font-medium text-neutral-200 hover:bg-neutral-700"
+      className={cx(
+        "rounded bg-slate-800 px-4 py-1.5 text-sm font-medium text-slate-200 hover:bg-slate-700",
+        className
+      )}
       ref={ref}
-      {...rest}
+      {...props}
     >
       {children}
     </button>

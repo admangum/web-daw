@@ -14,18 +14,18 @@ export function Select({
 }: React.PropsWithChildren<Props>) {
   return (
     <S.Root value={value} onValueChange={onValueChange}>
-      <S.Trigger className="rounded bg-neutral-800 py-1 px-1.5 text-sm font-medium text-neutral-200 hover:bg-neutral-700">
+      <S.Trigger className="rounded bg-slate-800 py-1 px-1.5 text-sm font-medium text-slate-200 hover:bg-slate-700">
         <S.Value placeholder={placeholder} aria-label={value}></S.Value>
       </S.Trigger>
       <S.Portal>
-        <S.Content className="text-sm overflow-hidden rounded bg-neutral-200 text-black shadow-md">
+        <S.Content className="text-sm overflow-hidden rounded bg-slate-200 text-black shadow-md">
           <S.ScrollUpButton />
           <S.Viewport className="p-1.5">
             {items.map((item) => (
               <S.Item
                 key={item.value}
                 value={item.value}
-                className="flex items-center rounded py-1 px-1.5 select-none data-highlighted:bg-neutral-100"
+                className="flex items-center rounded py-1 px-1.5 select-none data-highlighted:bg-slate-100"
               >
                 <S.ItemText>{item.label}</S.ItemText>
               </S.Item>

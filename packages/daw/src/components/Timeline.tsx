@@ -9,13 +9,13 @@ function TimeRuler() {
 
   return (
     <div
-      className="relative h-6 shrink-0 border-b border-neutral-700"
+      className="relative h-6 shrink-0 border-b border-slate-700"
       style={{ width: TIMELINE_WIDTH_SECONDS * pixelsPerSecond }}
     >
       {marks.map((second) => (
         <div
           key={second}
-          className="absolute top-0 h-full border-l border-neutral-800 text-[10px] text-neutral-500"
+          className="absolute top-0 h-full border-l border-slate-800 text-[10px] text-slate-500"
           style={{ left: second * pixelsPerSecond }}
         >
           <span className="ml-1">{second}s</span>
@@ -25,11 +25,15 @@ function TimeRuler() {
   );
 }
 
-export function Timeline() {
+interface Props {
+  className?: string;
+}
+
+export function Timeline({ ...props }: Props) {
   const tracks = useProjectStore((s) => s.tracks);
 
   return (
-    <div className="relative flex-1 overflow-x-auto">
+    <div {...props}>
       <TimeRuler />
       <div className="relative">
         {tracks.map((track) => (

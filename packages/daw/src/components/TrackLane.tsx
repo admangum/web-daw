@@ -34,11 +34,19 @@ export function TrackLane({ track, ...props }: Props) {
     removeClip(clip.id);
   }, []);
 
+  const bg =
+    selectedTrackId === track.id
+      ? "bg-[repeating-linear-gradient(135deg,--alpha(var(--color-slate-200)/12%)_0,--alpha(var(--color-slate-200)/12%)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-top-left"
+      : "bg-transparent";
+
   return (
     <div
       {...props}
-      className="relative h-18 shrink-0 border-b border-neutral-700"
-      style={{ width: TIMELINE_WIDTH_SECONDS * pixelsPerSecond }}
+      className={`relative h-18 shrink-0 border-b border-slate-700 ${bg}`}
+      style={{
+        width: TIMELINE_WIDTH_SECONDS * pixelsPerSecond,
+        // backgroundImage: `background: repeating-linear-gradient(135deg, black, black 10px, #ffffff11 11px, #ffffff11 12px)`,
+      }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
       ref={laneDiv}

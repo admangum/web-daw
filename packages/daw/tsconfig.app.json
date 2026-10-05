@@ -23,7 +23,9 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "@/ui": ["./src/ui/index"]
+      "@/ui": ["./src/ui/index"],
+      "@/ui/icons": ["./src/ui/icons/index"],
+      "@/util": ["./src/util"]
     }
   },
   "include": ["src"]
