@@ -34,6 +34,7 @@ web-daw/
 │       │   ├── engine/      # engine singleton, sync.ts adapter, bufferCache, synth
 │       │   ├── stores/      # Zustand stores (useProjectStore, useTransportStore, useUIStore)
 │       │   ├── ui/          # Low level UI building blocks
+│       │   │   └── icons/   # svg/ is the source; components/ and index.ts are generated (scripts/icons, runs in vite dev or `pnpm --filter daw icons`)
 │       │   └── main.tsx
 │       ├── package.json
 │       ├── tsconfig.json

@@ -1,10 +1,14 @@
-// import { RecordFill } from "./svg";
+import { Fill } from "./icons";
 import { Button } from "./Button";
+import { cx } from "@/util";
 
-export function ButtonRecord() {
+interface Props {
+  className?: string;
+}
+export function ButtonRecord({ className }: Props) {
   return (
-    <Button className="flex items-center justify-center rounded-r-full w-14">
-      {/* <RecordFill className="size-icon translate-x-[-2px] translate-y-[0px]" /> */}
+    <Button className={cx("flex items-center justify-center rounded-r-full", className)}>
+      <Fill.Record className="size-icon translate-x-[-2px] translate-y-[0px]" />
     </Button>
   );
 }

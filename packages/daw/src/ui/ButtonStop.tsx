@@ -1,10 +1,13 @@
-// import { PlayFill } from "./svg";
+import { Fill } from "./icons";
 import { Button } from "./Button";
 
-export function ButtonStop() {
+interface Props {
+  onClick?: () => void;
+}
+export function ButtonStop({ onClick }: Props) {
   return (
-    <Button className="flex items-center justify-center rounded-l-full w-14">
-      {/* <PlayFill className="size-icon translate-x-[2px] translate-y-[0px]" /> */}
+    <Button className="flex items-center justify-center rounded-full" onClick={onClick}>
+      <Fill.Stop className="size-icon translate-x-[-2px] translate-y-[0px]" />
     </Button>
   );
 }

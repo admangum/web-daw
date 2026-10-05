@@ -12,7 +12,11 @@ export function TransportBar() {
     <div className="flex h-22 shrink-0 items-center border-b border-slate-800 px-4">
       <div className="flex-1/3">Song/Clip Title</div>
       <div className="flex flex-1/3 justify-center">
-        <ButtonComboPlayRecord />
+        <ButtonComboPlayRecord
+          isPlaying={isPlaying}
+          onPlayClick={() => play()}
+          onStopClick={() => stop()}
+        />
       </div>
       <div className="flex flex-1/3 justify-end">
         <button
