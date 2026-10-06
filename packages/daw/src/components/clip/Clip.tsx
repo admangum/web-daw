@@ -56,7 +56,10 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
           }}
         ></div>
       </DialogTrigger>
-      <DialogContent className="size-full bg-transparent">
+      <DialogContent
+        className="size-full bg-transparent"
+        portalContainer={document.getElementById("main")}
+      >
         <ClipEditor
           onCloseClick={() => setIsEditing(false)}
           clip={clip}

@@ -8,7 +8,7 @@ export function Button({ children, ref, className, ...props }: React.PropsWithCh
   return (
     <button
       className={cx(
-        "rounded bg-slate-800 px-4 py-1.5 text-sm font-medium text-slate-200 hover:bg-slate-700",
+        "rounded bg-slate-800 text-sm font-medium cursor-pointer text-slate-200 hover:bg-slate-700",
         className
       )}
       ref={ref}

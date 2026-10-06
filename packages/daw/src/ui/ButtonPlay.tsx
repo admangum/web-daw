@@ -9,10 +9,10 @@ interface Props {
 export function ButtonPlay({ className, onClick }: Props) {
   return (
     <Button
-      className={cx("flex items-center justify-center rounded-l-full", className)}
+      className={cx("flex items-center justify-center rounded-full group", className)}
       onClick={onClick}
     >
-      <Fill.Play className="size-icon translate-x-[2px] translate-y-[0px]" />
+      <Fill.Play className="size-icon" />
     </Button>
   );
 }

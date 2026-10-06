@@ -10,9 +10,10 @@ body {
   color: var(--color-slate-200);
   stroke-color: var(--color-slate-200);
   fill: var(--color-slate-200);
+  border-color: var(--color-slate-500);
 }
 
 .size-icon {
-  width: calc(var(--spacing) * 10);
-  height: calc(var(--spacing) * 10);
+  width: calc(var(--spacing) * 4);
+  height: calc(var(--spacing) * 4);
 }

@@ -1,9 +1,6 @@
 export function cx(...args: (string | undefined)[]) {
-  const all = args.reduce(
-    (acc, item) => (typeof item === "string" ? `${acc} ${item}` : acc),
-    ""
-  ) as string;
+  const all = args.filter((arg) => typeof arg === "string").join(" ");
   const tokens = all.trim().split(/\s+/);
-  const unique = [...new Set(tokens)];
-  return unique.join(" ");
+  const uniqueTokens = [...new Set(tokens)];
+  return uniqueTokens.join(" ");
 }

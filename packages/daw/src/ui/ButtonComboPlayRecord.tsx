@@ -12,13 +12,18 @@ interface Props {
 }
 export function ButtonComboPlayRecord({ isPlaying, onPlayClick, onStopClick, className }: Props) {
   return (
-    <div className={cx("flex justify-between w-37 h-12 fill-slate-300", className)}>
+    <div
+      className={cx(
+        "flex justify-center gap-2 bg-slate-800/80 px-2 py-2 rounded-full fill-slate-200",
+        className
+      )}
+    >
       {isPlaying ? (
-        <ButtonStop onClick={onStopClick} />
+        <ButtonStop className="w-full" onClick={onStopClick} />
       ) : (
         <React.Fragment>
-          <ButtonPlay className="" onClick={onPlayClick} />
-          <ButtonRecord className="" />
+          <ButtonPlay className="size-9 bg-slate-700" onClick={onPlayClick} />
+          <ButtonRecord className="size-9 bg-slate-700" />
         </React.Fragment>
       )}
     </div>

@@ -7,8 +7,8 @@ interface Props {
 }
 export function ButtonRecord({ className }: Props) {
   return (
-    <Button className={cx("flex items-center justify-center rounded-r-full", className)}>
-      <Fill.Record className="size-icon translate-x-[-2px] translate-y-[0px]" />
+    <Button className={cx("group flex items-center justify-center rounded-full", className)}>
+      <Fill.Record className="size-icon" />
     </Button>
   );
 }
