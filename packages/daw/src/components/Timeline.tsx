@@ -3,7 +3,7 @@ import { useUIStore } from "../stores/useUIStore";
 import { Playhead } from "./Playhead";
 import { TIMELINE_WIDTH_SECONDS, TrackLane } from "./TrackLane";
 
-function TimeRuler() {
+export function TimeRuler() {
   const pixelsPerSecond = useUIStore((s) => s.pixelsPerSecond);
   const marks = Array.from({ length: TIMELINE_WIDTH_SECONDS + 1 }, (_, i) => i);
 
