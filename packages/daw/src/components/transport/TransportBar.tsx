@@ -3,16 +3,18 @@ import { useState } from "react";
 import { addTrack, pause, play, stop } from "../../engine/sync";
 import { useTransportStore } from "../../stores/useTransportStore";
 import { ButtonComboPlayRecord } from "@/ui";
+import { useProjectStore } from "../../stores/useProjectStore";
 
 export function TransportBar() {
   const isPlaying = useTransportStore((s) => s.isPlaying);
+  const { bpm } = useProjectStore();
   const [nextTrackNumber, setNextTrackNumber] = useState(1);
 
   return (
     <div className="flex h-22 shrink-0 items-center border-b border-slate-800 px-4">
       <div className="flex flex-col">
         <h1 className="flex-1/3 text-slate-300 text-2xl font-light">Untitled</h1>
-        <div className="flex-1/3 text-slate-300 text-sm font-light">100 bpm</div>
+        <div className="flex-1/3 text-slate-300 text-sm font-light">{bpm} bpm</div>
       </div>
       <div className="flex flex-1/3 justify-center">
         {/* <ButtonComboPlayRecord
