@@ -1,6 +1,6 @@
 import { Clip, Sound, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
-import { getBuffer, registerBuffer } from "./bufferCache";
+import * as BufferCache from "./bufferCache";
 import { createDemoClipBuffer } from "./synth";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
@@ -102,7 +102,7 @@ export function addClipAt(trackId: string, startTime: number): void {
   const duration = 0.5;
   const buffer = createDemoClipBuffer(engine.context, duration);
   const bufferId = crypto.randomUUID();
-  registerBuffer(bufferId, buffer);
+  BufferCache.registerBuffer(bufferId, buffer);
 
   const clip: ClipData = {
     id: crypto.randomUUID(),

@@ -1,5 +1,5 @@
 import { useShallow } from "zustand/react/shallow";
-import { addClipAt, removeClip } from "../engine/sync";
+import * as Sync from "../engine/sync";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
 import type { ClipData, TrackData } from "../stores/types";
@@ -23,7 +23,7 @@ export function TrackLane({ track, ...props }: Props) {
       }
       const rect = event.currentTarget.getBoundingClientRect();
       const x = event.clientX - rect.left;
-      addClipAt(track.id, x / pixelsPerSecond);
+      Sync.addClipAt(track.id, x / pixelsPerSecond);
     },
     [track]
   );
@@ -31,7 +31,7 @@ export function TrackLane({ track, ...props }: Props) {
   const onDoubleClick = React.useCallback(() => {}, []);
 
   const onClipClick = React.useCallback((clip: ClipData) => {
-    removeClip(clip.id);
+    Sync.removeClip(clip.id);
   }, []);
 
   const bg =
