@@ -1,4 +1,4 @@
-import { Clip, type PitchNotation } from "audio-engine";
+import { Clip, Sound, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
 import { getBuffer, registerBuffer } from "./bufferCache";
 import { createDemoClipBuffer } from "./synth";
@@ -19,15 +19,27 @@ function pushClipsToEngine(): void {
   const clips = useProjectStore.getState().clips;
   const engineClips = clips
     .map((clip) => {
-      const buffer = getBuffer(clip.bufferId);
-      if (!buffer) return null;
+      const sounds: Sound[] = [];
+      for (const sound of clip.sounds) {
+        const buffer = BufferCache.getBuffer(sound.bufferId);
+        if (!buffer) continue;
+        sounds.push(
+          new Sound({
+            id: sound.id,
+            startTime: sound.startTime,
+            duration: sound.duration,
+            offset: sound.offset,
+            buffer,
+          })
+        );
+      }
       return new Clip({
         id: clip.id,
         trackId: clip.trackId,
         startTime: clip.startTime,
         duration: clip.duration,
         offset: clip.offset,
-        buffer,
+        sounds,
       });
     })
     .filter((clip): clip is Clip => clip !== null);
@@ -98,7 +110,15 @@ export function addClipAt(trackId: string, startTime: number): void {
     startTime: Math.max(0, startTime),
     duration,
     offset: 0,
-    bufferId,
+    sounds: [
+      {
+        id: crypto.randomUUID(),
+        startTime: Math.max(0, startTime),
+        duration,
+        offset: 0,
+        bufferId: bufferId,
+      },
+    ],
   };
   useProjectStore.getState().addClip(clip);
   pushClipsToEngine();

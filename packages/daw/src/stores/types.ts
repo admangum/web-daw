@@ -13,6 +13,14 @@ export interface ClipData {
   startTime: number;
   duration: number;
   offset: number;
+  sounds: SoundData[];
+}
+
+export interface SoundData {
+  id: string;
+  startTime: number;
+  duration: number;
+  offset: number;
   /** Key into the engine-side AudioBuffer cache — the store itself stays JSON-serializable. */
   bufferId: string;
 }

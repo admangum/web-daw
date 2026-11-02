@@ -69,12 +69,16 @@ export class Scheduler {
       const track = this.tracks.get(clip.trackId);
       if (!track) continue;
 
-      const source = new BufferSource(this.context, clip.buffer);
-      source.play(track.input, {
-        when: this.transport.toContextTime(clip.startTime),
-        offset: clip.offset,
-        duration: clip.duration,
-      });
+      for (const sound of clip.sounds) {
+        if (sound.startTime < this.scheduledUpTo || sound.startTime >= windowEnd) continue;
+
+        const source = new BufferSource(this.context, sound.buffer);
+        source.play(track.input, {
+          when: this.transport.toContextTime(sound.startTime),
+          offset: sound.offset,
+          duration: sound.duration,
+        });
+      }
     }
 
     this.scheduledUpTo = windowEnd;
