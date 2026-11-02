@@ -1,7 +1,8 @@
 import { Dialog, DialogContent, DialogTrigger } from "@/ui";
 import type { ClipData } from "../../stores/types";
 import React from "react";
-import { useClickHandlers, usePressAndHold } from "../../hooks";
+import { usePressAndHold } from "../../hooks";
+// import { useClickHandlers, usePressAndHold } from "../../hooks";
 import { ClipEditor } from "./ClipEditor";
 import { useUIStore } from "../../stores/useUIStore";
 

@@ -6,7 +6,7 @@ interface ModalState {
   popModal: () => void;
 }
 
-export const useModalStore = create<ModalState>((set, get) => ({
+export const useModalStore = create<ModalState>((set) => ({
   modalQueue: [],
   pushModal: (modal) => set((state) => ({ modalQueue: state.modalQueue.concat(modal) })),
   popModal: () => set((state) => ({ modalQueue: state.modalQueue.slice(0, -1) })),

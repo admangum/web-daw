@@ -7,11 +7,10 @@ export function Grid() {
   const { pixelsPerSecond } = useUIStore();
   const bps = (bpm / 60) * 1;
   const pixelsPerBeat = Math.round(pixelsPerSecond / bps);
-  console.log("pixelsPerBeat: ", pixelsPerBeat);
 
   return (
     <div>
-      {NOTES_TOP_DOWN.map((note) => (
+      {NOTES_TOP_DOWN.map(() => (
         <div
           className="flex items-center box-border border-b border-slate-700 w-full"
           style={{

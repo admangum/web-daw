@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { ClipData } from "../../stores/types";
-import { PianoRoll } from "../piano/PianoRoll";
+// import { PianoRoll } from "../piano/PianoRoll";
 import { TimeRulerSpacer } from "../TimeRulerSpacer";
 import { TimeRuler } from "../Timeline";
 import { Keyboard } from "../piano/Keyboard";
@@ -11,7 +11,7 @@ interface Props {
   onCloseClick: () => void;
   style?: CSSProperties;
 }
-export function ClipEditor({ clip, onCloseClick, style }: Props) {
+export function ClipEditor({ onCloseClick, style }: Props) {
   return (
     <div
       style={style}

@@ -1,7 +1,7 @@
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
-import { Instrument } from "./track/Instrument";
-import { TrackInstrumentSelector } from "./track/TrackInstrumentSelector";
+// import { Instrument } from "./track/Instrument";
+// import { TrackInstrumentSelector } from "./track/TrackInstrumentSelector";
 
 interface Props {
   className?: string;

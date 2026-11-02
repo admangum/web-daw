@@ -1,14 +1,6 @@
 import { describe, expect, it } from "vitest";
-import {
-  KEY_HEIGHT,
-  NOTES_TOP_DOWN,
-  isBlackKey,
-  isC,
-  noteName,
-  noteTop,
-  octave,
-  scrollTopForNote,
-} from "../key-layout";
+import { isBlackKey, isC, noteName, noteTop, octave, scrollTopForNote } from "../key-layout";
+import { KEY_HEIGHT, NOTES_TOP_DOWN } from "../../constants";
 
 describe("key layout", () => {
   it("names notes with middle C as C4", () => {

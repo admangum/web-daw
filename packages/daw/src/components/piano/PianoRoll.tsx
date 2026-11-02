@@ -1,6 +1,6 @@
 import React from "react";
 import { Keyboard } from "./Keyboard";
-import { KEY_HEIGHT, MIDI_NOTE_COUNT, NOTES_TOP_DOWN } from "./constants";
+import { KEY_HEIGHT, MIDI_NOTE_COUNT } from "./constants";
 import { scrollTopForNote } from "./util/key-layout";
 import { Grid } from "./Grid";
 import { TimeRuler } from "../Timeline";

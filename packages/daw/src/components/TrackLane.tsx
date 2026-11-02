@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function TrackLane({ track, ...props }: Props) {
-  const { pixelsPerSecond, selectTrack, selectedTrackId } = useUIStore();
+  const { pixelsPerSecond, selectedTrackId } = useUIStore();
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
   const laneDiv = React.useRef<HTMLDivElement>(null);
   const onClick = React.useCallback(
