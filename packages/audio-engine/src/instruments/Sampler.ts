@@ -1,4 +1,5 @@
 import { BufferSource } from "../track/sources";
+import type { Note } from "../types/note";
 import type { SamplerOptions, PitchNotation, Instrument } from "./types";
 
 type SampleBufferMap = Map<PitchNotation, AudioBuffer>;
@@ -19,6 +20,10 @@ export class Sampler implements Instrument {
 
   get output(): AudioNode {
     return this.muteGain;
+  }
+
+  public getAudioBuffer(note: Note) {
+    return this.sampleBufferMap.get(note);
   }
 
   public async load(): Promise<void> {

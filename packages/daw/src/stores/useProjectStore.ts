@@ -11,6 +11,7 @@ interface ProjectState {
   updateTrack: (id: string, patch: Partial<TrackData>) => void;
   addClip: (clip: ClipData) => void;
   removeClip: (id: string) => void;
+  updateClip: (id: string, patch: Partial<ClipData>) => void;
 }
 
 /**
@@ -40,4 +41,7 @@ export const useProjectStore = create<ProjectState>((set) => ({
   addClip: (clip) => set((s) => ({ clips: [...s.clips, clip] })),
 
   removeClip: (id) => set((s) => ({ clips: s.clips.filter((c) => c.id !== id) })),
+
+  updateClip: (id, patch) =>
+    set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...patch } : c)) })),
 }));

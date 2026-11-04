@@ -11,7 +11,7 @@ interface Props {
   onCloseClick: () => void;
   style?: CSSProperties;
 }
-export function ClipEditor({ onCloseClick, style }: Props) {
+export function ClipEditor({ clip, onCloseClick, style }: Props) {
   return (
     <div
       style={style}
@@ -36,7 +36,7 @@ export function ClipEditor({ onCloseClick, style }: Props) {
 
         {/* <!-- Bottom Right (1,1): Massive contents, free scrolling on both axes --> */}
         <div className="z-10">
-          <Grid />
+          <Grid clip={clip} />
         </div>
       </div>
     </div>

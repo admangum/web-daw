@@ -26,7 +26,9 @@ export function TransportBar() {
       <div className="flex flex-1/3 justify-end">
         <button
           type="button"
-          onClick={() => (isPlaying ? pause() : play())}
+          onClick={() => {
+            return isPlaying ? pause() : play();
+          }}
           className="rounded bg-emerald-600 px-4 py-1.5 text-sm font-medium text-white hover:bg-emerald-500"
         >
           {isPlaying ? "Pause" : "Play"}

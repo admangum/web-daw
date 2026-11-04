@@ -1,3 +1,5 @@
+import type { Note } from "../types/note";
+
 type FileURL = string;
 export type PitchNotation = string;
 
@@ -27,4 +29,5 @@ export interface Instrument {
   output: AudioNode;
   play(note: PitchNotation): void;
   load(): Promise<void>;
+  getAudioBuffer(note: Note): AudioBuffer | undefined;
 }

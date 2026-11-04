@@ -11,11 +11,9 @@ export function useClickHandlers(
   const onClickProxy = React.useCallback(
     function onClickProxy(...args: any[]) {
       if (typeof timer.current === "number") {
-        console.log("clear timer and set to null");
         clearTimeout(timer.current);
         timer.current = null;
       } else {
-        console.log("set timer");
         timer.current = setTimeout(() => {
           onClick(...args);
           timer.current = null;

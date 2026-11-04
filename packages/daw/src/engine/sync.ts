@@ -1,10 +1,8 @@
 import { Clip, Sound, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
-import * as BufferCache from "./bufferCache";
-import { createDemoClipBuffer } from "./synth";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
-import type { ClipData, TrackData } from "../stores/types";
+import type { ClipData, SoundData, TrackData } from "../stores/types";
 import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
 import { useModalStore } from "../stores/useModalStore";
 
@@ -21,15 +19,14 @@ function pushClipsToEngine(): void {
     .map((clip) => {
       const sounds: Sound[] = [];
       for (const sound of clip.sounds) {
-        const buffer = BufferCache.getBuffer(sound.bufferId);
-        if (!buffer) continue;
         sounds.push(
           new Sound({
             id: sound.id,
+            clipId: clip.id,
             startTime: sound.startTime,
             duration: sound.duration,
             offset: sound.offset,
-            buffer,
+            midiNote: sound.midiNote,
           })
         );
       }
@@ -99,10 +96,7 @@ export function playTrackInstrument(id: string, note: PitchNotation): void {
 }
 
 export function addClipAt(trackId: string, startTime: number): void {
-  const duration = 0.5;
-  const buffer = createDemoClipBuffer(engine.context, duration);
-  const bufferId = crypto.randomUUID();
-  BufferCache.registerBuffer(bufferId, buffer);
+  const duration = 5;
 
   const clip: ClipData = {
     id: crypto.randomUUID(),
@@ -110,15 +104,7 @@ export function addClipAt(trackId: string, startTime: number): void {
     startTime: Math.max(0, startTime),
     duration,
     offset: 0,
-    sounds: [
-      {
-        id: crypto.randomUUID(),
-        startTime: Math.max(0, startTime),
-        duration,
-        offset: 0,
-        bufferId: bufferId,
-      },
-    ],
+    sounds: [],
   };
   useProjectStore.getState().addClip(clip);
   pushClipsToEngine();
@@ -126,6 +112,25 @@ export function addClipAt(trackId: string, startTime: number): void {
 
 export function removeClip(id: string): void {
   useProjectStore.getState().removeClip(id);
+  pushClipsToEngine();
+}
+
+export function addSoundAt(
+  clip: ClipData,
+  midiNote: number,
+  startTime: number,
+  duration: number = 0.5
+) {
+  const sound = {
+    id: crypto.randomUUID(),
+    clipId: clip.id,
+    startTime: Math.max(0, startTime),
+    duration,
+    offset: 0,
+    midiNote,
+  };
+  clip.sounds.push(sound);
+  useProjectStore.getState().updateClip(clip.id, clip);
   pushClipsToEngine();
 }
 
