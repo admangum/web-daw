@@ -1,4 +1,3 @@
-export { Button } from "./Button";
+export * as Button from "./Button";
 export { Dialog, DialogContent, DialogTrigger } from "./Dialog";
 export { Select } from "./Select";
-export { ButtonComboPlayRecord } from "./ButtonComboPlayRecord";

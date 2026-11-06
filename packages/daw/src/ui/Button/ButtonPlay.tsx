@@ -1,5 +1,5 @@
-import { Fill } from "./icons";
-import { Button } from "./Button";
+import { Fill } from "@/ui/icons";
+import { ButtonBase } from "./ButtonBase";
 import { cx } from "@/util";
 
 interface Props {
@@ -8,11 +8,11 @@ interface Props {
 }
 export function ButtonPlay({ className, onClick }: Props) {
   return (
-    <Button
+    <ButtonBase
       className={cx("flex items-center justify-center rounded-full group", className)}
       onClick={onClick}
     >
       <Fill.Play className="size-icon" />
-    </Button>
+    </ButtonBase>
   );
 }

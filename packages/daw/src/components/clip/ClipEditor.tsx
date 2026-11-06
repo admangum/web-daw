@@ -5,6 +5,7 @@ import { TimeRulerSpacer } from "../TimeRulerSpacer";
 import { TimeRuler } from "../Timeline";
 import { Keyboard } from "../piano/Keyboard";
 import { Grid } from "../piano/Grid";
+import { Button } from "@/ui";
 
 interface Props {
   clip: ClipData;
@@ -16,9 +17,9 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     <div
       style={style}
       className="size-full bg-slate-900/85 border-slate-700 transition duration-300 ease starting:scale-0 scale-100 starting:opacity-0 opacity-100"
-      onClick={onCloseClick}
     >
       <div className="grid grid-cols-[--spacing(36)_1fr] grid-rows-[--h-6_1fr] w-full h-full overflow-auto scrollbar-none">
+        <Button.Close className="absolute z-40 right-2 top-8" onClick={onCloseClick} />
         {/* <!-- Top Left (0,0): Completely frozen --> */}
         <div className="sticky top-0 left-0 z-30  bg-slate-900">
           <TimeRulerSpacer />

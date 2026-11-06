@@ -1,5 +1,5 @@
-import { Fill } from "./icons";
-import { Button } from "./Button";
+import { Fill } from "@/ui/icons";
+import { ButtonBase } from "./ButtonBase";
 import { cx } from "@/util";
 
 interface Props {
@@ -8,11 +8,11 @@ interface Props {
 }
 export function ButtonStop({ className, onClick }: Props) {
   return (
-    <Button
+    <ButtonBase
       className={cx("flex items-center justify-center rounded-full", className)}
       onClick={onClick}
     >
       <Fill.Stop className="size-icon translate-x-[-2px] translate-y-[0px] fill-red-600/80" />
-    </Button>
+    </ButtonBase>
   );
 }
