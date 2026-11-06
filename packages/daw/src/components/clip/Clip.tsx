@@ -43,7 +43,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   }, [isEditing]);
 
   return (
-    <Dialog {...props} open={isEditing}>
+    <Dialog {...props} open={isEditing} modal={false}>
       <DialogTrigger asChild>
         <div
           title="Click to remove"
