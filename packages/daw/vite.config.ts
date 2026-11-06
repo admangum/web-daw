@@ -18,8 +18,7 @@ export default defineConfig({
   plugins: [iconsPlugin(), react(), tailwindcss()],
   resolve: {
     alias: {
-      "@/ui": path.resolve(import.meta.dirname, "./src/ui/index"),
-      "@/ui/icons": path.resolve(import.meta.dirname, "./src/ui/icons/index"),
+      "@/ui": path.resolve(import.meta.dirname, "./src/ui"),
       "@/util": path.resolve(import.meta.dirname, "./src/util"),
     },
   },

@@ -23,8 +23,8 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "@/ui": ["./src/ui/index"],
-      "@/ui/icons": ["./src/ui/icons/index"],
+      "@/ui": ["./src/ui"],
+      "@/ui/*": ["./src/ui/*"],
       "@/util": ["./src/util"]
     }
   },
