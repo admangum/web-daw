@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import { useEffect, useRef, type CSSProperties } from "react";
 import type { ClipData } from "../../stores/types";
 // import { PianoRoll } from "../piano/PianoRoll";
 import { TimeRulerSpacer } from "../TimeRulerSpacer";
@@ -6,6 +6,8 @@ import { TimeRuler } from "../Timeline";
 import { Keyboard } from "../piano/Keyboard";
 import { Grid } from "../piano/Grid";
 import { Button } from "@/ui";
+import { getTransportPosition, seek } from "../../engine/sync";
+import { useUIStore } from "../../stores/useUIStore";
 
 interface Props {
   clip: ClipData;

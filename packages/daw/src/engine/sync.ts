@@ -5,6 +5,7 @@ import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, SoundData, TrackData } from "../stores/types";
 import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
 import { useModalStore } from "../stores/useModalStore";
+import { useUIStore } from "../stores/useUIStore";
 
 /**
  * The only module allowed to translate between useProjectStore's plain
@@ -148,10 +149,21 @@ export function pause(): void {
 export function stop(): void {
   engine.stop();
   useTransportStore.getState().setIsPlaying(false);
-  useTransportStore.getState().setPlaybackPosition(0);
+  const editingClipId = useUIStore.getState().editingClipId;
+  if (editingClipId) {
+    const editingClip = useProjectStore.getState().getClip(editingClipId);
+    useTransportStore.getState().setPlaybackPosition(editingClip.startTime);
+    engine.transport.seek(editingClip.startTime);
+  } else {
+    useTransportStore.getState().setPlaybackPosition(0);
+  }
 }
 
 export function seek(position: number): void {
   engine.transport.seek(position);
   useTransportStore.getState().setPlaybackPosition(position);
+}
+
+export function getTransportPosition(): number {
+  return engine.transport.getPosition();
 }

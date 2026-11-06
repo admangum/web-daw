@@ -9,6 +9,7 @@ interface ProjectState {
   addTrack: (track: TrackData) => void;
   removeTrack: (id: string) => void;
   updateTrack: (id: string, patch: Partial<TrackData>) => void;
+  getClip: (id: string) => ClipData;
   addClip: (clip: ClipData) => void;
   removeClip: (id: string) => void;
   updateClip: (id: string, patch: Partial<ClipData>) => void;
@@ -19,12 +20,12 @@ interface ProjectState {
  * here only touch this store; engine wiring lives in engine/sync.ts, which
  * is the sole translator between this state and the live audio-engine graph.
  */
-export const useProjectStore = create<ProjectState>((set) => ({
+export const useProjectStore = create<ProjectState>((set, get) => ({
   name: "Untitled Project",
   bpm: 120,
   tracks: [],
   clips: [],
-
+  getClip: (id) => get().clips.find((c) => c.id === id)!,
   addTrack: (track) => set((s) => ({ tracks: [...s.tracks, track] })),
 
   removeTrack: (id) =>

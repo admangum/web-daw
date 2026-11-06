@@ -8,7 +8,15 @@ import { useUIStore } from "../stores/useUIStore";
  * position through the store on every tick would re-render every subscriber
  * many times a second.
  */
-export function Playhead() {
+interface Props {
+  /**
+   * Offset of the playhead from the beginning of the track in milliseconds.
+   * Useful when showing the playhead in the clip editor.
+   */
+  offset?: number;
+}
+
+export function Playhead({ offset = 0 }: Props) {
   const lineRef = useRef<HTMLDivElement>(null);
   const pixelsPerSecond = useUIStore((s) => s.pixelsPerSecond);
 
@@ -16,7 +24,7 @@ export function Playhead() {
     let frame: number;
 
     const tick = () => {
-      const position = engine.transport.getPosition();
+      const position = Math.max(engine.transport.getPosition() - offset, 0);
       if (lineRef.current) {
         lineRef.current.style.transform = `translateX(${position * pixelsPerSecond}px)`;
       }

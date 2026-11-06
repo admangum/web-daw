@@ -31,8 +31,10 @@ export function TrackLane({ track, ...props }: Props) {
 
   const onDoubleClick = React.useCallback(() => {}, []);
 
-  const onClipClick = React.useCallback((clip: ClipData) => {
-    Sync.removeClip(clip.id);
+  const onClipClick = React.useCallback((clip: ClipData, isEditing: boolean) => {
+    if (!isEditing) {
+      Sync.removeClip(clip.id);
+    }
   }, []);
 
   const bg =
