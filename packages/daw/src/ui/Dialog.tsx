@@ -1,6 +1,6 @@
 import { Dialog as D } from "radix-ui";
 import type { PropsWithChildren } from "react";
-import { cx } from "../util";
+import { cx } from "@/util";
 // interface Props {
 //   title: string;
 //   description?: string;
