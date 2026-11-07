@@ -1,5 +1,5 @@
 import { useRef, type MouseEvent } from "react";
-import type { ClipData, SoundData } from "../../stores/types";
+import type { ClipData } from "../../stores/types";
 import { useProjectStore } from "../../stores/useProjectStore";
 import { useUIStore } from "../../stores/useUIStore";
 import * as Sync from "../../engine/sync";

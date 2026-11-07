@@ -1,10 +1,6 @@
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/ui";
 import type { SoundData } from "../../stores/types";
-import { usePressAndHold } from "../../hooks";
 // import { useClickHandlers, usePressAndHold } from "../../hooks";
-
-import { useUIStore } from "../../stores/useUIStore";
 
 interface Pos {
   x: number;

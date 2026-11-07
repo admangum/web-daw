@@ -2,7 +2,7 @@ import { Clip, Sound, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
-import type { ClipData, SoundData, TrackData } from "../stores/types";
+import type { ClipData, TrackData } from "../stores/types";
 import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
 import { useModalStore } from "../stores/useModalStore";
 import { useUIStore } from "../stores/useUIStore";
