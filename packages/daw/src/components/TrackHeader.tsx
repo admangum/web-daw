@@ -9,7 +9,7 @@ interface Props {
 }
 
 export function TrackHeader({ track, ...props }: Props) {
-  const { openTrackSettings, selectTrack, selectedTrackId } = useUIStore();
+  const { setEditingTrackId, selectTrack, selectedTrackId } = useUIStore();
   const onClick = React.useCallback(() => {
     if (selectedTrackId === track.id) {
       selectTrack(null);
@@ -19,7 +19,7 @@ export function TrackHeader({ track, ...props }: Props) {
   }, [track, selectedTrackId]);
 
   const onDoubleClick = React.useCallback(() => {
-    openTrackSettings(track.id);
+    setEditingTrackId(track.id);
   }, []);
 
   const bg = selectedTrackId === track.id ? "bg-slate-900" : "bg-transparent";

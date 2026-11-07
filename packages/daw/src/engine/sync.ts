@@ -1,4 +1,4 @@
-import { Clip, Sound, type PitchNotation } from "audio-engine";
+import { Clip, Sound, type MidiNote, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
@@ -118,7 +118,7 @@ export function removeClip(id: string): void {
 
 export function addSoundAt(
   clip: ClipData,
-  midiNote: number,
+  midiNote: MidiNote,
   startTime: number,
   duration: number = 0.5
 ) {

@@ -1,4 +1,3 @@
-import React from "react";
 import type { SoundData } from "../../stores/types";
 // import { useClickHandlers, usePressAndHold } from "../../hooks";
 

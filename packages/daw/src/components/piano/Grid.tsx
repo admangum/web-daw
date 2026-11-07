@@ -6,6 +6,7 @@ import * as Sync from "../../engine/sync";
 import { Sound } from "../sound/Sound";
 import { KEY_HEIGHT, NOTES_TOP_DOWN } from "./constants";
 import { Playhead } from "../Playhead";
+import type { MidiNote } from "audio-engine";
 
 interface Props {
   clip: ClipData;
@@ -23,7 +24,7 @@ export function Grid({ clip }: Props) {
       return;
     }
     e.stopPropagation();
-    const midiNote = parseInt((e.target as HTMLDivElement).dataset.midiNote || "0", 10);
+    const midiNote = parseInt((e.target as HTMLDivElement).dataset.midiNote || "0", 10) as MidiNote;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
     const startTime = clip.startTime + x / pixelsPerSecond;
