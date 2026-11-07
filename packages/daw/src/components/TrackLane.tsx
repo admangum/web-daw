@@ -17,17 +17,14 @@ export function TrackLane({ track, ...props }: Props) {
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
 
   const laneDiv = React.useRef<HTMLDivElement>(null);
-  const onClick = React.useCallback(
-    (event: React.MouseEvent) => {
-      if (event.target !== laneDiv.current) {
-        return;
-      }
-      const rect = event.currentTarget.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      Sync.addClipAt(track.id, x / pixelsPerSecond);
-    },
-    [track]
-  );
+  const onClick = (event: React.MouseEvent) => {
+    if (event.target !== laneDiv.current) {
+      return;
+    }
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    Sync.addClipAt(track.id, x / pixelsPerSecond);
+  };
 
   const onDoubleClick = React.useCallback(() => {}, []);
 

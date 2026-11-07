@@ -33,7 +33,7 @@ export function Playhead({ offset = 0 }: Props) {
 
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [pixelsPerSecond]);
+  }, [pixelsPerSecond, offset]);
 
   return (
     <div

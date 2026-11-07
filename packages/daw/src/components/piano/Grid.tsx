@@ -36,6 +36,7 @@ export function Grid({ clip }: Props) {
       <>
         {NOTES_TOP_DOWN.map((midiNote) => (
           <div
+            key={`midi-note-${midiNote}`}
             data-midi-note={midiNote}
             className="relative flex items-center box-border border-b border-slate-700 w-full"
             style={{
@@ -47,6 +48,7 @@ export function Grid({ clip }: Props) {
               if (sound.midiNote === midiNote) {
                 return (
                   <Sound
+                    key={sound.id}
                     sound={sound}
                     pos={{
                       x: (sound.startTime - clip.startTime) * pixelsPerSecond,

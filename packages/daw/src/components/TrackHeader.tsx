@@ -10,17 +10,17 @@ interface Props {
 
 export function TrackHeader({ track, ...props }: Props) {
   const { setEditingTrackId, selectTrack, selectedTrackId } = useUIStore();
-  const onClick = React.useCallback(() => {
+  const onClick = () => {
     if (selectedTrackId === track.id) {
       selectTrack(null);
     } else {
       selectTrack(track.id);
     }
-  }, [track, selectedTrackId]);
+  };
 
-  const onDoubleClick = React.useCallback(() => {
+  const onDoubleClick = () => {
     setEditingTrackId(track.id);
-  }, []);
+  };
 
   const bg = selectedTrackId === track.id ? "bg-slate-900" : "bg-transparent";
 

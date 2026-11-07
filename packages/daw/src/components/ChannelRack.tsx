@@ -1,3 +1,4 @@
+import { cx } from "@/util";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
 // import { Instrument } from "./track/Instrument";
@@ -7,7 +8,7 @@ interface Props {
   className?: string;
 }
 
-export function ChannelRack({}: Props) {
+export function ChannelRack({ className }: Props) {
   const selectedTrackId = useUIStore((s) => s.selectedTrackId);
   const track = useProjectStore((s) => s.tracks.find((t) => t.id === selectedTrackId));
 
@@ -15,7 +16,10 @@ export function ChannelRack({}: Props) {
 
   return (
     <div
-      className={`transition-all ease-out h-52 opacity-100 duration-250 starting:h-0 starting:opacity-0`}
+      className={cx(
+        `transition-all ease-out h-52 opacity-100 duration-250 starting:h-0 starting:opacity-0`,
+        className
+      )}
     >
       <div className="flex h-full shrink-0 items-start gap-2 border-t border-slate-700 p-3">
         {/* <TrackInstrumentSelector track={track} /> */}
