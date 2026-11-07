@@ -1,8 +1,7 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/ui";
+import { Dialog } from "@/ui";
 import type { ClipData } from "../../stores/types";
 import React, { useRef } from "react";
 import { usePressAndHold } from "../../hooks";
-// import { useClickHandlers, usePressAndHold } from "../../hooks";
 import { ClipEditor } from "./ClipEditor";
 import { useUIStore } from "../../stores/useUIStore";
 import { getTransportPosition, seek } from "../../engine/sync";
@@ -52,8 +51,8 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   );
 
   return (
-    <Dialog {...props} open={!!editingClipId} modal={false}>
-      <DialogTrigger asChild>
+    <Dialog.Root {...props} open={!!editingClipId} modal={false}>
+      <Dialog.Trigger asChild>
         <div
           title="Click to remove"
           onClick={() => onClick(clip, !!editingClipId)}
@@ -65,8 +64,8 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
             width: size.width,
           }}
         ></div>
-      </DialogTrigger>
-      <DialogContent
+      </Dialog.Trigger>
+      <Dialog.Content
         className="size-full bg-transparent"
         portalContainer={document.getElementById("main")}
       >
@@ -75,7 +74,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
           clip={clip}
           style={{ transformOrigin: `${clickPos.x}px ${clickPos.y}px` }}
         />
-      </DialogContent>
-    </Dialog>
+      </Dialog.Content>
+    </Dialog.Root>
   );
 }

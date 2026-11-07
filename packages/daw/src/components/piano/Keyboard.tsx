@@ -1,5 +1,5 @@
 import { memo, useMemo, useRef, useState } from "react";
-import { cx } from "../../util";
+import { cx } from "@/util";
 import { KEY_HEIGHT, MIDI_NOTE_COUNT, NOTES_TOP_DOWN } from "./constants";
 import { isBlackKey, isC, noteName } from "./util/key-layout";
 

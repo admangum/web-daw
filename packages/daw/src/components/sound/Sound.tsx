@@ -1,5 +1,4 @@
 import type { SoundData } from "../../stores/types";
-// import { useClickHandlers, usePressAndHold } from "../../hooks";
 
 interface Pos {
   x: number;

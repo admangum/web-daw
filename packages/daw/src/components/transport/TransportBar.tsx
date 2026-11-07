@@ -1,8 +1,6 @@
 import { useState } from "react";
-// import { engine } from "../../engine/engine";
 import { addTrack, pause, play, stop } from "../../engine/sync";
 import { useTransportStore } from "../../stores/useTransportStore";
-// import { ButtonComboPlayRecord } from "@/ui";
 import { useProjectStore } from "../../stores/useProjectStore";
 
 export function TransportBar() {
@@ -15,13 +13,7 @@ export function TransportBar() {
         <h1 className="flex-1/3 text-slate-300 text-2xl font-light">Untitled</h1>
         <div className="flex-1/3 text-slate-300 text-sm font-light">{bpm} bpm</div>
       </div>
-      <div className="flex flex-1/3 justify-center">
-        {/* <ButtonComboPlayRecord
-          isPlaying={isPlaying}
-          onPlayClick={() => play()}
-          onStopClick={() => stop()}
-        /> */}
-      </div>
+      <div className="flex flex-1/3 justify-center"></div>
       <div className="flex flex-1/3 justify-end">
         <button
           type="button"
@@ -53,10 +45,6 @@ export function TransportBar() {
           + Add Track
         </button>
       </div>
-
-      {/* <div className="ml-auto text-xs text-slate-500">
-        {engine.state === "suspended" ? "Audio suspended — press Play to start" : null}
-      </div> */}
     </div>
   );
 }

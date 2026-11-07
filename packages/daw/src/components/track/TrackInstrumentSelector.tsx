@@ -25,20 +25,4 @@ export function TrackInstrumentSelector({ track }: Props) {
       onValueChange={onValueChange}
     />
   );
-  // return (
-  //   <select
-  //     name="instrument"
-  //     value={instrumentId}
-  //     onChange={(e) => {
-  //       setTrackInstrument(trackId, e.target.value);
-  //     }}
-  //     className="rounded bg-slate-800 px-2 py-1 text-xs text-slate-200"
-  //   >
-  //     {INSTRUMENTS.map(([id, instrument]) => (
-  //       <option key={id} value={id}>
-  //         {instrument.name}
-  //       </option>
-  //     ))}
-  //   </select>
-  // );
 }

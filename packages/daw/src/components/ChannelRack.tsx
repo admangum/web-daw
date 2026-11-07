@@ -1,8 +1,6 @@
 import { cx } from "@/util";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
-// import { Instrument } from "./track/Instrument";
-// import { TrackInstrumentSelector } from "./track/TrackInstrumentSelector";
 
 interface Props {
   className?: string;
@@ -22,8 +20,9 @@ export function ChannelRack({ className }: Props) {
       )}
     >
       <div className="flex h-full shrink-0 items-start gap-2 border-t border-slate-700 p-3">
-        {/* <TrackInstrumentSelector track={track} /> */}
-        {/* <Instrument trackId={track.id} /> */}
+        {/* 
+          Channel rack components (Instrument, filters, etc) to go here
+        */}
       </div>
     </div>
   );

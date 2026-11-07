@@ -1,7 +1,5 @@
-// import { ModalManager } from "./components/ModalManager";
 import { Timeline } from "./components/Timeline";
 import { TimeRulerSpacer } from "./components/TimeRulerSpacer";
-// import { TrackSettings } from "./components/track/TrackSettings";
 import { ChannelRack } from "./components/ChannelRack";
 import { TrackHeader } from "./components/TrackHeader";
 import { TransportBar } from "./components/transport/TransportBar";
@@ -30,7 +28,6 @@ function App() {
       <ChannelRack />
 
       {/* <TrackSettings /> */}
-      {/* <ModalManager /> */}
     </div>
   );
 }

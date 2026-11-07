@@ -26,13 +26,13 @@ export function TrackLane({ track, ...props }: Props) {
     Sync.addClipAt(track.id, x / pixelsPerSecond);
   };
 
-  const onDoubleClick = React.useCallback(() => {}, []);
+  const onDoubleClick = () => {};
 
-  const onClipClick = React.useCallback((clip: ClipData, isEditing: boolean) => {
+  const onClipClick = (clip: ClipData, isEditing: boolean) => {
     if (!isEditing) {
       Sync.removeClip(clip.id);
     }
-  }, []);
+  };
 
   const bg =
     selectedTrackId === track.id
@@ -45,7 +45,6 @@ export function TrackLane({ track, ...props }: Props) {
       className={`relative h-18 shrink-0 border-b border-slate-700 ${bg}`}
       style={{
         width: TIMELINE_WIDTH_SECONDS * pixelsPerSecond,
-        // backgroundImage: `background: repeating-linear-gradient(135deg, black, black 10px, #ffffff11 11px, #ffffff11 12px)`,
       }}
       onClick={onClick}
       onDoubleClick={onDoubleClick}

@@ -1,3 +1,3 @@
 export * as Button from "./Button";
-export { Dialog, DialogContent, DialogTrigger } from "./Dialog";
+export * as Dialog from "./Dialog";
 export { Select } from "./Select";

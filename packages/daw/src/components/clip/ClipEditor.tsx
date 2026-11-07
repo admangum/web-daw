@@ -1,6 +1,5 @@
 import type { CSSProperties } from "react";
 import type { ClipData } from "../../stores/types";
-// import { PianoRoll } from "../piano/PianoRoll";
 import { TimeRulerSpacer } from "../TimeRulerSpacer";
 import { TimeRuler } from "../Timeline";
 import { Keyboard } from "../piano/Keyboard";

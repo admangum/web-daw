@@ -1,4 +1,3 @@
-import React from "react";
 import { setTrackMuted, setTrackSoloed } from "../engine/sync";
 import type { TrackData } from "../stores/types";
 import { useUIStore } from "../stores/useUIStore";
@@ -52,15 +51,6 @@ export function TrackHeader({ track, ...props }: Props) {
         >
           S
         </button>
-        {/* <input
-          type="range"
-          min={0}
-          max={1.5}
-          step={0.01}
-          value={track.volume}
-          onChange={(e) => setTrackVolume(track.id, Number(e.target.value))}
-          className="w-16"
-        /> */}
       </div>
     </div>
   );
