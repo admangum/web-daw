@@ -1,3 +1,5 @@
+import type { Sound } from "./Sound";
+
 export interface ClipOptions {
   id: string;
   trackId: string;
@@ -7,7 +9,8 @@ export interface ClipOptions {
   duration: number;
   /** Offset into the source buffer where playback should begin, in seconds. */
   offset?: number;
-  buffer: AudioBuffer;
+  // buffer: AudioBuffer;
+  sounds: Sound[];
 }
 
 export class Clip {
@@ -16,7 +19,7 @@ export class Clip {
   startTime: number;
   duration: number;
   offset: number;
-  buffer: AudioBuffer;
+  sounds: Sound[];
 
   constructor(options: ClipOptions) {
     this.id = options.id;
@@ -24,7 +27,7 @@ export class Clip {
     this.startTime = options.startTime;
     this.duration = options.duration;
     this.offset = options.offset ?? 0;
-    this.buffer = options.buffer;
+    this.sounds = options.sounds;
   }
 
   get endTime(): number {

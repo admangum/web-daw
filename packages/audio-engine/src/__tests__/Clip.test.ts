@@ -7,7 +7,7 @@ function makeClip(startTime: number, duration: number, id = "c") {
     trackId: "t1",
     startTime,
     duration,
-    buffer: {} as AudioBuffer,
+    sounds: [],
   });
 }
 

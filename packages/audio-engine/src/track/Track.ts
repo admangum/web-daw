@@ -1,3 +1,5 @@
+import { Sampler } from "../instruments/Sampler";
+import type { Instrument, InstrumentDefinition, PitchNotation } from "../instruments/types";
 import { EffectsChain } from "./EffectsChain";
 
 export interface TrackOptions {
@@ -16,14 +18,20 @@ export class Track {
   readonly id: string;
   name: string;
 
+  private context: BaseAudioContext;
+
   readonly effectsChain: EffectsChain;
   private readonly volumeGain: GainNode;
   /** Driven by Mixer to resolve solo/mute across tracks — not set directly. */
   readonly muteGain: GainNode;
 
+  instrument: Instrument;
+
   constructor(context: BaseAudioContext, options: TrackOptions) {
     this.id = options.id;
     this.name = options.name;
+
+    this.context = context;
 
     this.effectsChain = new EffectsChain(context);
     this.volumeGain = context.createGain();
@@ -32,6 +40,8 @@ export class Track {
 
     this.effectsChain.output.connect(this.volumeGain);
     this.volumeGain.connect(this.muteGain);
+
+    this.instrument = new Sampler(this.context, { sampleURLMap: {} });
   }
 
   /** Where per-clip source nodes connect in. */
@@ -46,5 +56,17 @@ export class Track {
 
   get volume(): AudioParam {
     return this.volumeGain.gain;
+  }
+
+  setInstrument(instrumentDef: InstrumentDefinition): void {
+    if (instrumentDef.kind === "sampler") {
+      this.instrument = new Sampler(this.context, instrumentDef.options);
+      this.instrument.output.connect(this.input);
+      this.instrument.load();
+    }
+  }
+
+  playInstrument(note: PitchNotation): void {
+    this.instrument?.play(note);
   }
 }

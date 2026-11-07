@@ -1,10 +1,10 @@
-import { Clip } from "audio-engine";
+import { Clip, Sound, type MidiNote, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
-import { getBuffer, registerBuffer } from "./bufferCache";
-import { createDemoClipBuffer } from "./synth";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, TrackData } from "../stores/types";
+import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
+import { useUIStore } from "../stores/useUIStore";
 
 /**
  * The only module allowed to translate between useProjectStore's plain
@@ -17,15 +17,26 @@ function pushClipsToEngine(): void {
   const clips = useProjectStore.getState().clips;
   const engineClips = clips
     .map((clip) => {
-      const buffer = getBuffer(clip.bufferId);
-      if (!buffer) return null;
+      const sounds: Sound[] = [];
+      for (const sound of clip.sounds) {
+        sounds.push(
+          new Sound({
+            id: sound.id,
+            clipId: clip.id,
+            startTime: sound.startTime,
+            duration: sound.duration,
+            offset: sound.offset,
+            midiNote: sound.midiNote,
+          })
+        );
+      }
       return new Clip({
         id: clip.id,
         trackId: clip.trackId,
         startTime: clip.startTime,
         duration: clip.duration,
         offset: clip.offset,
-        buffer,
+        sounds,
       });
     })
     .filter((clip): clip is Clip => clip !== null);
@@ -35,7 +46,14 @@ function pushClipsToEngine(): void {
 
 export function addTrack(name: string): void {
   const id = crypto.randomUUID();
-  const track: TrackData = { id, name, volume: 1, muted: false, soloed: false };
+  const track: TrackData = {
+    id,
+    name,
+    volume: 1,
+    muted: false,
+    soloed: false,
+    instrumentId: DEFAULT_INSTRUMENT_ID,
+  };
   engine.addTrack({ id, name, volume: track.volume });
   useProjectStore.getState().addTrack(track);
 }
@@ -62,11 +80,22 @@ export function setTrackSoloed(id: string, soloed: boolean): void {
   useProjectStore.getState().updateTrack(id, { soloed });
 }
 
+export function setTrackInstrument(id: string, instrumentId: string): void {
+  useProjectStore.getState().updateTrack(id, { instrumentId });
+  const track = engine.getTrack(id);
+  const instrumentDef = INSTRUMENT_MAP.get(instrumentId);
+  if (instrumentDef && track) {
+    track?.setInstrument(instrumentDef);
+  }
+}
+
+export function playTrackInstrument(id: string, note: PitchNotation): void {
+  const track = engine.getTrack(id);
+  track?.playInstrument(note);
+}
+
 export function addClipAt(trackId: string, startTime: number): void {
-  const duration = 0.5;
-  const buffer = createDemoClipBuffer(engine.context, duration);
-  const bufferId = crypto.randomUUID();
-  registerBuffer(bufferId, buffer);
+  const duration = 5;
 
   const clip: ClipData = {
     id: crypto.randomUUID(),
@@ -74,7 +103,7 @@ export function addClipAt(trackId: string, startTime: number): void {
     startTime: Math.max(0, startTime),
     duration,
     offset: 0,
-    bufferId,
+    sounds: [],
   };
   useProjectStore.getState().addClip(clip);
   pushClipsToEngine();
@@ -82,6 +111,25 @@ export function addClipAt(trackId: string, startTime: number): void {
 
 export function removeClip(id: string): void {
   useProjectStore.getState().removeClip(id);
+  pushClipsToEngine();
+}
+
+export function addSoundAt(
+  clip: ClipData,
+  midiNote: MidiNote,
+  startTime: number,
+  duration: number = 0.5
+) {
+  const sound = {
+    id: crypto.randomUUID(),
+    clipId: clip.id,
+    startTime: Math.max(0, startTime),
+    duration,
+    offset: 0,
+    midiNote,
+  };
+  clip.sounds.push(sound);
+  useProjectStore.getState().updateClip(clip.id, clip);
   pushClipsToEngine();
 }
 
@@ -99,10 +147,21 @@ export function pause(): void {
 export function stop(): void {
   engine.stop();
   useTransportStore.getState().setIsPlaying(false);
-  useTransportStore.getState().setPlaybackPosition(0);
+  const editingClipId = useUIStore.getState().editingClipId;
+  if (editingClipId) {
+    const editingClip = useProjectStore.getState().getClip(editingClipId);
+    useTransportStore.getState().setPlaybackPosition(editingClip.startTime);
+    engine.transport.seek(editingClip.startTime);
+  } else {
+    useTransportStore.getState().setPlaybackPosition(0);
+  }
 }
 
 export function seek(position: number): void {
   engine.transport.seek(position);
   useTransportStore.getState().setPlaybackPosition(position);
+}
+
+export function getTransportPosition(): number {
+  return engine.transport.getPosition();
 }

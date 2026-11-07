@@ -33,6 +33,8 @@ web-daw/
 │       │   ├── components/  # TransportBar, TrackHeader, TrackLane, Timeline, Playhead
 │       │   ├── engine/      # engine singleton, sync.ts adapter, bufferCache, synth
 │       │   ├── stores/      # Zustand stores (useProjectStore, useTransportStore, useUIStore)
+│       │   ├── ui/          # Low level UI building blocks
+│       │   │   └── icons/   # svg/ is the source; components/ and index.ts are generated (scripts/icons, runs in vite dev or `pnpm --filter daw icons`)
 │       │   └── main.tsx
 │       ├── package.json
 │       ├── tsconfig.json
@@ -64,17 +66,17 @@ Per-clip playback nodes (`BufferSource`) are created on demand by the `Scheduler
 
 ### Key classes
 
-| Class | Responsibility |
-|---|---|
-| `AudioEngine` | Creates/resumes `AudioContext`, owns transport, mixer, tracks, scheduler |
-| `Transport` | Play, pause, stop, seek, BPM, loop region; position derived from `AudioContext.currentTime` |
-| `Track` | Effects chain + volume/mute gain stages; exposes `input`/`output` |
-| `Mixer` | Owns cross-track solo/mute resolution and the master bus |
-| `EffectsChain` | Ordered `AudioEffect[]`; rewires on insert/remove with click-safe gain ramping |
-| `AudioEffect` | Abstract one-input/one-output wrapper; concrete: `GainEffect`, `PanEffect`, `FilterEffect` |
-| `AudioSource` | Abstract factory for single-use source nodes; concrete: `BufferSource`, `OscillatorSource` |
-| `Clip` | Audio region: `{ trackId, startTime, duration, offset, buffer }` |
-| `Scheduler` | Look-ahead scheduling loop; fires clips onto tracks at the right time |
+| Class          | Responsibility                                                                              |
+| -------------- | ------------------------------------------------------------------------------------------- |
+| `AudioEngine`  | Creates/resumes `AudioContext`, owns transport, mixer, tracks, scheduler                    |
+| `Transport`    | Play, pause, stop, seek, BPM, loop region; position derived from `AudioContext.currentTime` |
+| `Track`        | Effects chain + volume/mute gain stages; exposes `input`/`output`                           |
+| `Mixer`        | Owns cross-track solo/mute resolution and the master bus                                    |
+| `EffectsChain` | Ordered `AudioEffect[]`; rewires on insert/remove with click-safe gain ramping              |
+| `AudioEffect`  | Abstract one-input/one-output wrapper; concrete: `GainEffect`, `PanEffect`, `FilterEffect`  |
+| `AudioSource`  | Abstract factory for single-use source nodes; concrete: `BufferSource`, `OscillatorSource`  |
+| `Clip`         | Audio region: `{ trackId, startTime, duration, offset, buffer }`                            |
+| `Scheduler`    | Look-ahead scheduling loop; fires clips onto tracks at the right time                       |
 
 ### Scheduling strategy (critical path)
 
@@ -99,16 +101,21 @@ Solo/mute is cross-track (soloing one track must mute all others), so `Track` do
 ### Public API (`src/index.ts`)
 
 ```ts
-export { AudioEngine, type EngineOptions } from './engine/AudioEngine'
-export { Transport, type TransportState, type LoopRegion } from './transport/Transport'
-export { Track, type TrackOptions } from './track/Track'
-export { Mixer } from './track/Mixer'
-export { EffectsChain } from './track/EffectsChain'
-export { BufferSource, OscillatorSource, type OscillatorSourceOptions, type PlayOptions } from './track/sources'
-export { AudioSource } from './track/sources/AudioSource'
-export { AudioEffect, GainEffect, PanEffect, FilterEffect } from './track/effects'
-export { Clip, type ClipOptions } from './timeline/Clip'
-export { Scheduler } from './timeline/Scheduler'
+export { AudioEngine, type EngineOptions } from "./engine/AudioEngine";
+export { Transport, type TransportState, type LoopRegion } from "./transport/Transport";
+export { Track, type TrackOptions } from "./track/Track";
+export { Mixer } from "./track/Mixer";
+export { EffectsChain } from "./track/EffectsChain";
+export {
+  BufferSource,
+  OscillatorSource,
+  type OscillatorSourceOptions,
+  type PlayOptions,
+} from "./track/sources";
+export { AudioSource } from "./track/sources/AudioSource";
+export { AudioEffect, GainEffect, PanEffect, FilterEffect } from "./track/effects";
+export { Clip, type ClipOptions } from "./timeline/Clip";
+export { Scheduler } from "./timeline/Scheduler";
 ```
 
 ### Testing strategy
@@ -130,11 +137,11 @@ Depends on `audio-engine` via `"audio-engine": "workspace:*"`.
 
 ### Zustand stores
 
-| Store | State |
-|---|---|
-| `useProjectStore` | `tracks: TrackData[]`, `clips: ClipData[]`, project name/bpm |
+| Store               | State                                                                      |
+| ------------------- | -------------------------------------------------------------------------- |
+| `useProjectStore`   | `tracks: TrackData[]`, `clips: ClipData[]`, project name/bpm               |
 | `useTransportStore` | `isPlaying`, `bpm`, `loop`, `playbackPosition` (snapshot only — see below) |
-| `useUIStore` | `selectedTrackId`, `pixelsPerSecond` |
+| `useUIStore`        | `selectedTrackId`, `pixelsPerSecond`                                       |
 
 Stores hold **plain serializable data only** — no `AudioNode`/`AudioBuffer`. `ClipData.bufferId` is a key into an engine-side `Map<string, AudioBuffer>` cache (`engine/bufferCache.ts`), not the buffer itself.
 
@@ -169,17 +176,18 @@ Not yet implemented. Planned: `idb` (already a dependency) to save/load project 
 
 ```ts
 type Project = {
-  id: string
-  name: string
-  bpm: number
-  tracks: TrackData[]
-  clips: ClipData[]
-}
+  id: string;
+  name: string;
+  bpm: number;
+  tracks: TrackData[];
+  clips: ClipData[];
+};
 ```
 
 **Deferred decisions worth flagging when this is built:**
-- *Musical time*: `Clip.startTime` is absolute seconds. Tempo-synced grid snapping would need a bars/beats representation too — revisit if/when BPM changes mid-project become a requirement.
-- *Undo/redo*: not in scope, but `useProjectStore` is kept flat/normalized so a temporal middleware (e.g. `zundo`) can be added later without a rewrite.
+
+- _Musical time_: `Clip.startTime` is absolute seconds. Tempo-synced grid snapping would need a bars/beats representation too — revisit if/when BPM changes mid-project become a requirement.
+- _Undo/redo_: not in scope, but `useProjectStore` is kept flat/normalized so a temporal middleware (e.g. `zundo`) can be added later without a rewrite.
 
 ---
 

@@ -1,9 +1,12 @@
+import type { MidiNote } from "audio-engine";
+
 export interface TrackData {
   id: string;
   name: string;
   volume: number;
   muted: boolean;
   soloed: boolean;
+  instrumentId: string;
 }
 
 export interface ClipData {
@@ -12,6 +15,14 @@ export interface ClipData {
   startTime: number;
   duration: number;
   offset: number;
-  /** Key into the engine-side AudioBuffer cache — the store itself stays JSON-serializable. */
-  bufferId: string;
+  sounds: SoundData[];
+}
+
+export interface SoundData {
+  id: string;
+  clipId: string;
+  startTime: number;
+  duration: number;
+  offset: number;
+  midiNote: MidiNote;
 }

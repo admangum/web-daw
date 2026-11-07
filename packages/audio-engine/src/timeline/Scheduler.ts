@@ -2,6 +2,7 @@ import type { Transport } from "../transport/Transport";
 import type { Track } from "../track/Track";
 import type { Clip } from "./Clip";
 import { BufferSource } from "../track/sources/BufferSource";
+import { midiNoteToNote } from "../utils/note";
 
 const TICK_INTERVAL_MS = 25;
 const LOOKAHEAD_SECONDS = 0.1;
@@ -64,17 +65,26 @@ export class Scheduler {
     const windowEnd = position + LOOKAHEAD_SECONDS;
 
     for (const clip of this.clips) {
-      if (clip.startTime < this.scheduledUpTo || clip.startTime >= windowEnd) continue;
+      if (clip.startTime + clip.duration < this.scheduledUpTo || clip.startTime >= windowEnd)
+        continue;
 
       const track = this.tracks.get(clip.trackId);
-      if (!track) continue;
+      if (!track || !track.instrument) continue;
 
-      const source = new BufferSource(this.context, clip.buffer);
-      source.play(track.input, {
-        when: this.transport.toContextTime(clip.startTime),
-        offset: clip.offset,
-        duration: clip.duration,
-      });
+      for (const sound of clip.sounds) {
+        if (sound.startTime < this.scheduledUpTo || sound.startTime >= windowEnd) continue;
+        const note = midiNoteToNote(sound.midiNote);
+        const audioBuffer = track.instrument.getAudioBuffer(note);
+        if (!audioBuffer) {
+          continue;
+        }
+        const source = new BufferSource(this.context, audioBuffer);
+        source.play(track.input, {
+          when: this.transport.toContextTime(sound.startTime),
+          offset: sound.offset,
+          duration: sound.duration,
+        });
+      }
     }
 
     this.scheduledUpTo = windowEnd;
