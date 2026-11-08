@@ -5,6 +5,7 @@ import { usePressAndHold } from "../../hooks";
 import { ClipEditor } from "./ClipEditor";
 import { useUIStore } from "../../stores/useUIStore";
 import { getTransportPosition, seek } from "../../engine/sync";
+import { useTransportStore } from "../../stores/useTransportStore";
 
 interface Pos {
   x: number;
@@ -23,6 +24,7 @@ interface Props {
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   const { selectedTrackId, selectTrack, editingClipId, setEditingClipId } = useUIStore();
+  const { isPlaying } = useTransportStore();
 
   const [clickPos, setClickPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
@@ -39,7 +41,9 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
 
   const onCloseClipEditor = () => {
     setEditingClipId(null);
-    seek(transportTimeAtOpen.current);
+    if (!isPlaying) {
+      seek(transportTimeAtOpen.current);
+    }
   };
 
   const [onMouseDown, onMouseUp] = usePressAndHold(
