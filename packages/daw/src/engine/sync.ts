@@ -1,4 +1,4 @@
-import { Clip, Sound, type MidiNote, type PitchNotation } from "audio-engine";
+import { Clip, Sound, type MidiNote, type Note } from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
@@ -90,7 +90,7 @@ export function setTrackInstrument(id: string, instrumentId: string): void {
   }
 }
 
-export function playTrackInstrument(id: string, note: PitchNotation): void {
+export function playTrackInstrument(id: string, note: Note): void {
   const track = engine.getTrack(id);
   track?.playInstrument(note);
 }

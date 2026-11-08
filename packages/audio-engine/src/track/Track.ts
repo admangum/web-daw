@@ -1,5 +1,6 @@
 import { Sampler } from "../instruments/Sampler";
-import type { Instrument, InstrumentDefinition, PitchNotation } from "../instruments/types";
+import type { Instrument, InstrumentDefinition } from "../instruments/types";
+import type { Note } from "../types/note";
 import { EffectsChain } from "./EffectsChain";
 
 export interface TrackOptions {
@@ -67,7 +68,7 @@ export class Track {
     }
   }
 
-  playInstrument(note: PitchNotation): void {
+  playInstrument(note: Note): void {
     this.instrument?.play(note);
   }
 }

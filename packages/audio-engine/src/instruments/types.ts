@@ -1,11 +1,10 @@
 import type { Note } from "../types/note";
 
 type FileURL = string;
-export type PitchNotation = string;
 
-interface SampleURLMap {
-  [note: PitchNotation]: FileURL;
-}
+export type SampleURLMap = Partial<{
+  [note in Note]: FileURL;
+}>;
 
 interface SamplerDefinition {
   name: string;
@@ -27,7 +26,7 @@ export type InstrumentDefinition = SamplerDefinition | SynthDefinition;
 
 export interface Instrument {
   output: AudioNode;
-  play(note: PitchNotation): void;
+  play(note: Note): void;
   load(): Promise<void>;
   getAudioBuffer(note: Note): AudioBuffer | undefined;
 }
