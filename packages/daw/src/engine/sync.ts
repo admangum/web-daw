@@ -1,4 +1,10 @@
-import { Clip, Sound, type MidiNote, type PitchNotation } from "audio-engine";
+import {
+  Clip,
+  Sound,
+  type InstrumentDefinition,
+  type MidiNote,
+  type PitchNotation,
+} from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
@@ -54,7 +60,8 @@ export function addTrack(name: string): void {
     soloed: false,
     instrumentId: DEFAULT_INSTRUMENT_ID,
   };
-  engine.addTrack({ id, name, volume: track.volume });
+  const instrumentDef = INSTRUMENT_MAP.get(DEFAULT_INSTRUMENT_ID) as InstrumentDefinition;
+  engine.addTrack({ id, name, volume: track.volume, instrumentDef });
   useProjectStore.getState().addTrack(track);
 }
 

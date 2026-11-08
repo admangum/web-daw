@@ -5,6 +5,7 @@ import { EffectsChain } from "./EffectsChain";
 export interface TrackOptions {
   id: string;
   name: string;
+  instrumentDef: InstrumentDefinition;
   volume?: number;
 }
 
@@ -25,7 +26,7 @@ export class Track {
   /** Driven by Mixer to resolve solo/mute across tracks — not set directly. */
   readonly muteGain: GainNode;
 
-  instrument: Instrument;
+  instrument!: Instrument;
 
   constructor(context: BaseAudioContext, options: TrackOptions) {
     this.id = options.id;
@@ -41,7 +42,7 @@ export class Track {
     this.effectsChain.output.connect(this.volumeGain);
     this.volumeGain.connect(this.muteGain);
 
-    this.instrument = new Sampler(this.context, { sampleURLMap: {} });
+    this.setInstrument(options.instrumentDef);
   }
 
   /** Where per-clip source nodes connect in. */

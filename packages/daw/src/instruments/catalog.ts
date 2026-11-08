@@ -32,6 +32,8 @@ export const INSTRUMENTS: [string, InstrumentDefinition][] = [
   ],
 ];
 
-export const INSTRUMENT_MAP: Map<string, InstrumentDefinition> = new Map(INSTRUMENTS);
+type InstrumentID = (typeof INSTRUMENTS)[number][0];
 
-export const DEFAULT_INSTRUMENT_ID = INSTRUMENTS[0][0];
+export const INSTRUMENT_MAP: Map<InstrumentID, InstrumentDefinition> = new Map(INSTRUMENTS);
+
+export const DEFAULT_INSTRUMENT_ID: InstrumentID = INSTRUMENTS[0][0];
