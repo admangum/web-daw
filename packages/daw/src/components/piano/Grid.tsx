@@ -1,5 +1,5 @@
 import { useRef, type MouseEvent } from "react";
-import type { ClipData } from "../../stores/types";
+import type { ClipData, SoundData } from "../../stores/types";
 import { useProjectStore } from "../../stores/useProjectStore";
 import { useUIStore } from "../../stores/useUIStore";
 import * as Sync from "../../engine/sync";
@@ -24,11 +24,17 @@ export function Grid({ clip }: Props) {
       return;
     }
     e.stopPropagation();
+
     const midiNote = parseInt((e.target as HTMLDivElement).dataset.midiNote || "0", 10) as MidiNote;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
     const startTime = clip.startTime + x / pixelsPerSecond;
     Sync.addSoundAt(clip, midiNote, startTime);
+  };
+
+  const onSoundClick = (e: MouseEvent, sound: SoundData) => {
+    e.stopPropagation();
+    Sync.removeSound(clip, sound.id);
   };
 
   return (
@@ -57,7 +63,7 @@ export function Grid({ clip }: Props) {
                     size={{
                       width: pixelsPerBeat,
                     }}
-                    onClick={() => {}}
+                    onClick={onSoundClick}
                   />
                 );
               }

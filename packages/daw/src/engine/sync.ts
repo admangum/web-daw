@@ -134,6 +134,15 @@ export function addSoundAt(
   pushClipsToEngine();
 }
 
+export function removeSound(clip: ClipData, id: string) {
+  const soundIdx = clip.sounds.findIndex((s) => s.id === id);
+  if (soundIdx > -1) {
+    clip.sounds.splice(soundIdx, 1);
+    useProjectStore.getState().updateClip(clip.id, clip);
+    pushClipsToEngine();
+  }
+}
+
 export async function play(): Promise<void> {
   await engine.play();
   useTransportStore.getState().setIsPlaying(true);
