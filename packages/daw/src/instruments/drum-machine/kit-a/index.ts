@@ -5,7 +5,7 @@ import clap from "./clap-01.wav";
 
 export default {
   C3: kick,
-  C4: snare,
-  C5: hihat,
-  C6: clap,
+  D3: snare,
+  F3: hihat,
+  G3: clap,
 };
