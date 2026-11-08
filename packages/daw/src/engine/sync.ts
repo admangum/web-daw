@@ -1,15 +1,9 @@
-import {
-  Clip,
-  Sound,
-  type InstrumentDefinition,
-  type MidiNote,
-  type PitchNotation,
-} from "audio-engine";
+import { Clip, Sound, type MidiNote, type PitchNotation } from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
 import type { ClipData, TrackData } from "../stores/types";
-import { DEFAULT_INSTRUMENT_ID, INSTRUMENT_MAP } from "../instruments/catalog";
+import { DEFAULT_INSTRUMENT_ID, getInstrumentDef } from "../instruments/catalog";
 import { useUIStore } from "../stores/useUIStore";
 
 /**
@@ -60,7 +54,7 @@ export function addTrack(name: string): void {
     soloed: false,
     instrumentId: DEFAULT_INSTRUMENT_ID,
   };
-  const instrumentDef = INSTRUMENT_MAP.get(DEFAULT_INSTRUMENT_ID) as InstrumentDefinition;
+  const instrumentDef = getInstrumentDef(DEFAULT_INSTRUMENT_ID);
   engine.addTrack({ id, name, volume: track.volume, instrumentDef });
   useProjectStore.getState().addTrack(track);
 }
@@ -90,7 +84,7 @@ export function setTrackSoloed(id: string, soloed: boolean): void {
 export function setTrackInstrument(id: string, instrumentId: string): void {
   useProjectStore.getState().updateTrack(id, { instrumentId });
   const track = engine.getTrack(id);
-  const instrumentDef = INSTRUMENT_MAP.get(instrumentId);
+  const instrumentDef = getInstrumentDef(instrumentId);
   if (instrumentDef && track) {
     track?.setInstrument(instrumentDef);
   }
