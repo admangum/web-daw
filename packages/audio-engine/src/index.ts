@@ -16,3 +16,4 @@ export { Sound, type SoundOptions } from "./timeline/Sound";
 export { Scheduler } from "./timeline/Scheduler";
 export type { InstrumentDefinition, SampleURLMap } from "./instruments/types";
 export type { Note, MidiNote } from "./types/note";
+export { noteToMidiNote, midiNoteToNote } from "./utils/note";
