@@ -1,6 +1,6 @@
 import { BufferSource } from "../track/sources";
 import type { MidiNote, Note } from "../types/note";
-import { noteToMidiNote } from "../utils/note";
+import { isMidiNote, noteToMidiNote } from "../utils/note";
 import type { SamplerOptions, Instrument } from "./types";
 
 type SampleBufferMap = Map<MidiNote, AudioBuffer>;
@@ -43,8 +43,9 @@ export class Sampler implements Instrument {
     });
   }
 
-  public play(note: Note): void {
-    const buffer = this.sampleBufferMap.get(noteToMidiNote(note));
+  public play(note: Note | MidiNote): void {
+    const noteToPlay = isMidiNote(note) ? note : noteToMidiNote(note);
+    const buffer = this.sampleBufferMap.get(noteToPlay);
     if (!buffer) return;
     const source = new BufferSource(this.context, buffer);
     source.play(this.muteGain, { when: this.context.currentTime });

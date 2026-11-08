@@ -1,6 +1,6 @@
 import { Sampler } from "../instruments/Sampler";
 import type { Instrument, InstrumentDefinition } from "../instruments/types";
-import type { Note } from "../types/note";
+import type { MidiNote, Note } from "../types/note";
 import { EffectsChain } from "./EffectsChain";
 
 export interface TrackOptions {
@@ -68,7 +68,7 @@ export class Track {
     }
   }
 
-  playInstrument(note: Note): void {
+  playInstrument(note: Note | MidiNote): void {
     this.instrument?.play(note);
   }
 }

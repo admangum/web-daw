@@ -2,23 +2,24 @@ import { memo, useMemo, useRef, useState } from "react";
 import { cx } from "@/util";
 import { KEY_HEIGHT, MIDI_NOTE_COUNT, NOTES_TOP_DOWN } from "./constants";
 import { isBlackKey, isC, noteName } from "./util/key-layout";
+import type { MidiNote } from "audio-engine";
 
 interface KeyboardProps {
   /** Called with the key's MIDI note when it is pressed. */
-  onKeyPress?: (midiNote: number) => void;
+  onKeyPress?: (midiNote: MidiNote) => void;
   /** Called with the key's MIDI note when the pointer releases it or leaves it while dragging. */
-  onKeyRelease?: (midiNote: number) => void;
+  onKeyRelease?: (midiNote: MidiNote) => void;
   /** MIDI notes to display as pressed, in addition to any held by the pointer. */
-  pressedNotes?: number[];
+  pressedNotes?: MidiNote[];
 
   className?: string;
 }
 
-const NO_NOTES: number[] = [];
+const NO_NOTES: MidiNote[] = [];
 
 function noteFromElement(el: Element | null) {
   const value = el?.closest<HTMLElement>("[data-note]")?.dataset.note;
-  return value === undefined ? null : Number(value);
+  return value === undefined ? null : (Number(value) as MidiNote);
 }
 
 export function Keyboard({
@@ -27,8 +28,8 @@ export function Keyboard({
   pressedNotes = NO_NOTES,
   className,
 }: KeyboardProps) {
-  const heldRef = useRef<number | null>(null);
-  const [heldNote, setHeldNote] = useState<number | null>(null);
+  const heldRef = useRef<MidiNote | null>(null);
+  const [heldNote, setHeldNote] = useState<MidiNote | null>(null);
 
   const pressed = useMemo(() => {
     const set = new Set(pressedNotes);
@@ -36,7 +37,7 @@ export function Keyboard({
     return set;
   }, [pressedNotes, heldNote]);
 
-  function hold(note: number | null) {
+  function hold(note: MidiNote | null) {
     const previous = heldRef.current;
     if (previous === note) return;
     heldRef.current = note;
@@ -91,7 +92,7 @@ const KeyboardKey = memo(function KeyboardKey({
   note,
   pressed,
 }: {
-  note: number;
+  note: MidiNote;
   pressed: boolean;
 }) {
   const black = isBlackKey(note);

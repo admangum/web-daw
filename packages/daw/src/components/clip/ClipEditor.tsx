@@ -1,5 +1,6 @@
 import { useCallback, type CSSProperties } from "react";
-import { noteToMidiNote } from "audio-engine";
+import { noteToMidiNote, type MidiNote } from "audio-engine";
+import * as Sync from "../../engine/sync";
 import type { ClipData } from "../../stores/types";
 import { TimeRulerSpacer } from "../TimeRulerSpacer";
 import { TimeRuler } from "../Timeline";
@@ -26,6 +27,13 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     // oxlint-disable-next-line react-hooks/exhaustive-deps - A onetime effect on initial mount
   }, []);
 
+  const onPianoKeyPress = useCallback(
+    (midiNote: MidiNote) => {
+      Sync.playTrackInstrument(clip.trackId, midiNote);
+    },
+    [clip]
+  );
+
   return (
     <div
       style={style}
@@ -48,7 +56,7 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
 
         {/* <!-- Bottom Left (1,0): Sticks horizontally, scrolls vertically --> */}
         <div className="sticky left-0 z-20">
-          <Keyboard />
+          <Keyboard onKeyPress={onPianoKeyPress} />
         </div>
 
         {/* <!-- Bottom Right (1,1): Massive contents, free scrolling on both axes --> */}

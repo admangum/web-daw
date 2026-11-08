@@ -1,4 +1,4 @@
-import type { Note } from "../types/note";
+import type { MidiNote, Note } from "../types/note";
 
 type FileURL = string;
 
@@ -26,7 +26,7 @@ export type InstrumentDefinition = SamplerDefinition | SynthDefinition;
 
 export interface Instrument {
   output: AudioNode;
-  play(note: Note): void;
+  play(note: Note | MidiNote): void;
   load(): Promise<void>;
   getAudioBuffer(note: Note): AudioBuffer | undefined;
 }

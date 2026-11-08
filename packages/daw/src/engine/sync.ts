@@ -90,7 +90,7 @@ export function setTrackInstrument(id: string, instrumentId: string): void {
   }
 }
 
-export function playTrackInstrument(id: string, note: Note): void {
+export function playTrackInstrument(id: string, note: Note | MidiNote): void {
   const track = engine.getTrack(id);
   track?.playInstrument(note);
 }
