@@ -52,3 +52,11 @@ export function midiNoteToNote(midiNote: MidiNote): Note {
 
   return `${SEMITONE_TO_NOTE[semitoneInOctave]}${octave}` as Note;
 }
+
+export function isNote(note: Note | MidiNote): note is Note {
+  return typeof note === "string";
+}
+
+export function isMidiNote(note: Note | MidiNote): note is MidiNote {
+  return typeof note === "number";
+}

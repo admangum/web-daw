@@ -14,5 +14,6 @@ export { AudioEffect, GainEffect, PanEffect, FilterEffect } from "./track/effect
 export { Clip, type ClipOptions } from "./timeline/Clip";
 export { Sound, type SoundOptions } from "./timeline/Sound";
 export { Scheduler } from "./timeline/Scheduler";
-export type { InstrumentDefinition, PitchNotation } from "./instruments/types";
+export type { InstrumentDefinition, SampleURLMap } from "./instruments/types";
 export type { Note, MidiNote } from "./types/note";
+export { noteToMidiNote, midiNoteToNote } from "./utils/note";

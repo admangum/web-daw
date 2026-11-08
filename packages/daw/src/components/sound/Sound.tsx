@@ -1,3 +1,4 @@
+import { type MouseEvent } from "react";
 import type { SoundData } from "../../stores/types";
 
 interface Pos {
@@ -11,19 +12,15 @@ interface Size {
 
 interface Props {
   sound: SoundData;
-  onClick: (sound: SoundData) => void;
+  onClick: (e: MouseEvent<HTMLDivElement>, sound: SoundData) => void;
   pos: Pos;
   size: Size;
 }
 export function Sound({ sound, onClick, pos, size, ...props }: Props) {
-  const onSoundClick = () => {
-    onClick(sound);
-  };
-
   return (
     <div
       {...props}
-      onClick={onSoundClick}
+      onClick={(e) => onClick(e, sound)}
       className="absolute h-full cursor-pointer bg-slate-700/80 overflow-hidden transition-colors delay-100 duration-300 active:bg-slate-400/80 hover:bg-slate-500/80"
       style={{
         translate: `${pos.x}px var(--tw-translate-y)`,

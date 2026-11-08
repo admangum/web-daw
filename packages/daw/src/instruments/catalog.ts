@@ -1,7 +1,7 @@
 import type { InstrumentDefinition } from "audio-engine";
 import DrumKitA from "./drum-machine/kit-a";
 
-export const INSTRUMENTS: [string, InstrumentDefinition][] = [
+const INSTRUMENTS: [string, InstrumentDefinition][] = [
   [
     "drum-kit-alpha",
     {
@@ -34,6 +34,14 @@ export const INSTRUMENTS: [string, InstrumentDefinition][] = [
 
 type InstrumentID = (typeof INSTRUMENTS)[number][0];
 
+export const DEFAULT_INSTRUMENT_ID: InstrumentID = INSTRUMENTS[0][0];
 export const INSTRUMENT_MAP: Map<InstrumentID, InstrumentDefinition> = new Map(INSTRUMENTS);
 
-export const DEFAULT_INSTRUMENT_ID: InstrumentID = INSTRUMENTS[0][0];
+/**
+ * List of instruments for use in selectboxes
+ */
+export const items = INSTRUMENTS.map(([value, meta]) => ({ value, label: meta.name }));
+
+export function getInstrumentDef(id: InstrumentID = DEFAULT_INSTRUMENT_ID) {
+  return INSTRUMENT_MAP.get(id) as InstrumentDefinition;
+}

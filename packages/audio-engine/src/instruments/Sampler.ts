@@ -1,8 +1,9 @@
 import { BufferSource } from "../track/sources";
-import type { Note } from "../types/note";
-import type { SamplerOptions, PitchNotation, Instrument } from "./types";
+import type { MidiNote, Note } from "../types/note";
+import { isMidiNote, noteToMidiNote } from "../utils/note";
+import type { SamplerOptions, Instrument } from "./types";
 
-type SampleBufferMap = Map<PitchNotation, AudioBuffer>;
+type SampleBufferMap = Map<MidiNote, AudioBuffer>;
 
 export class Sampler implements Instrument {
   private options: SamplerOptions;
@@ -10,10 +11,9 @@ export class Sampler implements Instrument {
   private sampleBufferMap: SampleBufferMap;
   private muteGain: GainNode;
 
-  constructor(context: BaseAudioContext, options: SamplerOptions);
-  constructor() {
-    this.options = Object.assign<Partial<SamplerOptions>, SamplerOptions>({}, arguments[1]);
-    this.context = arguments[0];
+  constructor(context: BaseAudioContext, options: SamplerOptions) {
+    this.options = Object.assign<Partial<SamplerOptions>, SamplerOptions>({}, options);
+    this.context = context;
     this.muteGain = this.context.createGain();
     this.sampleBufferMap = new Map();
   }
@@ -23,7 +23,7 @@ export class Sampler implements Instrument {
   }
 
   public getAudioBuffer(note: Note) {
-    return this.sampleBufferMap.get(note);
+    return this.sampleBufferMap.get(noteToMidiNote(note));
   }
 
   public async load(): Promise<void> {
@@ -32,7 +32,7 @@ export class Sampler implements Instrument {
         .then((response) => response.arrayBuffer())
         .then((arrayBuffer) => this.context.decodeAudioData(arrayBuffer))
         .then((audioBuffer) => {
-          this.sampleBufferMap.set(note, audioBuffer);
+          this.sampleBufferMap.set(noteToMidiNote(note as Note), audioBuffer);
           return audioBuffer;
         });
     });
@@ -43,8 +43,9 @@ export class Sampler implements Instrument {
     });
   }
 
-  public play(note: PitchNotation): void {
-    const buffer = this.sampleBufferMap.get(note);
+  public play(note: Note | MidiNote): void {
+    const noteToPlay = isMidiNote(note) ? note : noteToMidiNote(note);
+    const buffer = this.sampleBufferMap.get(noteToPlay);
     if (!buffer) return;
     const source = new BufferSource(this.context, buffer);
     source.play(this.muteGain, { when: this.context.currentTime });

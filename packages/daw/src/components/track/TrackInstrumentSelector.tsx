@@ -1,10 +1,8 @@
 import { Select } from "@/ui";
 import { setTrackInstrument } from "../../engine/sync";
-import { INSTRUMENTS } from "../../instruments/catalog";
+import { items } from "../../instruments/catalog";
 import type { TrackData } from "../../stores/types";
 import React from "react";
-
-const instruments = INSTRUMENTS.map(([value, meta]) => ({ value, label: meta.name }));
 
 interface Props {
   track: TrackData;
@@ -20,7 +18,7 @@ export function TrackInstrumentSelector({ track }: Props) {
   return (
     <Select
       placeholder="Select an instrument..."
-      items={instruments}
+      items={items}
       value={track.instrumentId}
       onValueChange={onValueChange}
     />
