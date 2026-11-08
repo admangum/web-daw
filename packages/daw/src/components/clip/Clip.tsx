@@ -6,6 +6,7 @@ import { ClipEditor } from "./ClipEditor";
 import { useUIStore } from "../../stores/useUIStore";
 import { getTransportPosition, seek } from "../../engine/sync";
 import { useTransportStore } from "../../stores/useTransportStore";
+import { ClipContent } from "./ClipContent";
 
 interface Pos {
   x: number;
@@ -57,7 +58,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   return (
     <Dialog.Root {...props} open={!!editingClipId} modal={false}>
       <Dialog.Trigger asChild>
-        <div
+        <ClipContent
           title="Click to remove"
           onClick={() => onClick(clip, !!editingClipId)}
           onMouseDown={onMouseDown}
@@ -67,7 +68,8 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
             translate: `${pos.x}px var(--tw-translate-y)`,
             width: size.width,
           }}
-        ></div>
+          clip={clip}
+        />
       </Dialog.Trigger>
       <Dialog.Content
         className="size-full bg-transparent"
