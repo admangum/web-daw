@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Mixer } from "../track/Mixer";
 import { Track } from "../track/Track";
 import { FakeAudioContext } from "./fakeAudioContext";
+import type { InstrumentDefinition } from "../instruments/types";
 
 function createFakeContext() {
   const fake = new FakeAudioContext();
@@ -19,8 +20,8 @@ describe("Mixer", () => {
   it("leaves all tracks audible with no mutes or solos", () => {
     const { ctx, destination } = createFakeContext();
     const mixer = new Mixer(ctx, destination);
-    const a = new Track(ctx, { id: "a", name: "A" });
-    const b = new Track(ctx, { id: "b", name: "B" });
+    const a = new Track(ctx, { id: "a", name: "A", instrumentDef: {} as InstrumentDefinition });
+    const b = new Track(ctx, { id: "b", name: "B", instrumentDef: {} as InstrumentDefinition });
     mixer.addTrack(a);
     mixer.addTrack(b);
 
@@ -31,8 +32,8 @@ describe("Mixer", () => {
   it("muting a track silences only that track", () => {
     const { ctx, destination } = createFakeContext();
     const mixer = new Mixer(ctx, destination);
-    const a = new Track(ctx, { id: "a", name: "A" });
-    const b = new Track(ctx, { id: "b", name: "B" });
+    const a = new Track(ctx, { id: "a", name: "A", instrumentDef: {} as InstrumentDefinition });
+    const b = new Track(ctx, { id: "b", name: "B", instrumentDef: {} as InstrumentDefinition });
     mixer.addTrack(a);
     mixer.addTrack(b);
 
@@ -45,9 +46,9 @@ describe("Mixer", () => {
   it("soloing a track silences every other track, muted or not", () => {
     const { ctx, destination } = createFakeContext();
     const mixer = new Mixer(ctx, destination);
-    const a = new Track(ctx, { id: "a", name: "A" });
-    const b = new Track(ctx, { id: "b", name: "B" });
-    const c = new Track(ctx, { id: "c", name: "C" });
+    const a = new Track(ctx, { id: "a", name: "A", instrumentDef: {} as InstrumentDefinition });
+    const b = new Track(ctx, { id: "b", name: "B", instrumentDef: {} as InstrumentDefinition });
+    const c = new Track(ctx, { id: "c", name: "C", instrumentDef: {} as InstrumentDefinition });
     mixer.addTrack(a);
     mixer.addTrack(b);
     mixer.addTrack(c);
@@ -62,8 +63,8 @@ describe("Mixer", () => {
   it("un-soloing restores normal mute resolution", () => {
     const { ctx, destination } = createFakeContext();
     const mixer = new Mixer(ctx, destination);
-    const a = new Track(ctx, { id: "a", name: "A" });
-    const b = new Track(ctx, { id: "b", name: "B" });
+    const a = new Track(ctx, { id: "a", name: "A", instrumentDef: {} as InstrumentDefinition });
+    const b = new Track(ctx, { id: "b", name: "B", instrumentDef: {} as InstrumentDefinition });
     mixer.addTrack(a);
     mixer.addTrack(b);
 
