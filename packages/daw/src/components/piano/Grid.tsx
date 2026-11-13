@@ -7,6 +7,7 @@ import { Sound } from "../sound/Sound";
 import { KEY_HEIGHT, NOTES_TOP_DOWN } from "./constants";
 import { Playhead } from "../Playhead";
 import type { MidiNote } from "audio-engine";
+import { GridRow } from "../grid/GridRow";
 
 interface Props {
   clip: ClipData;
@@ -41,14 +42,11 @@ export function Grid({ clip }: Props) {
     <div id="clip-editor-grid" className="relative" ref={gridElRef} onClick={onClick}>
       <>
         {NOTES_TOP_DOWN.map((midiNote) => (
-          <div
-            key={`midi-note-${midiNote}`}
-            data-midi-note={midiNote}
-            className="relative flex items-center box-border border-b border-slate-700 w-full"
-            style={{
-              height: `${KEY_HEIGHT}px`,
-              backgroundImage: `repeating-linear-gradient(90deg, var(--color-slate-700) 0px, transparent 1px, transparent ${pixelsPerBeat}px)`,
-            }}
+          <GridRow
+            key={String(midiNote)}
+            id={String(midiNote)}
+            height={KEY_HEIGHT}
+            pixelsPerColumn={pixelsPerBeat}
           >
             {clip.sounds.map((sound) => {
               if (sound.midiNote === midiNote) {
@@ -68,7 +66,7 @@ export function Grid({ clip }: Props) {
                 );
               }
             })}
-          </div>
+          </GridRow>
         ))}
       </>
       <Playhead offset={clip.startTime} />
