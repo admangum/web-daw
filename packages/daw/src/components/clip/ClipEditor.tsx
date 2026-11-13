@@ -37,15 +37,15 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
   return (
     <div
       style={style}
-      className="size-full bg-slate-900/85 border-slate-700 transition duration-300 ease starting:scale-0 scale-100 starting:opacity-0 opacity-100"
+      className="ease size-full scale-100 border-slate-700 bg-slate-900/85 opacity-100 transition duration-300 starting:scale-0 starting:opacity-0"
     >
       <div
         ref={gridRef}
-        className="grid grid-cols-[--spacing(36)_1fr] grid-rows-[--h-6_1fr] w-full h-full overflow-auto scrollbar-none"
+        className="grid h-full w-full scrollbar-none grid-cols-[--spacing(36)_1fr] grid-rows-[--h-6_1fr] overflow-auto"
       >
-        <Button.Close className="absolute z-40 right-2 top-8" onClick={onCloseClick} />
+        <Button.Close className="absolute top-8 right-2 z-40" onClick={onCloseClick} />
         {/* <!-- Top Left (0,0): Completely frozen --> */}
-        <div className="sticky top-0 left-0 z-30  bg-slate-900">
+        <div className="sticky top-0 left-0 z-30 bg-slate-900">
           <TimeRulerSpacer />
         </div>
 

@@ -3,7 +3,7 @@ import { playTrackInstrument } from "../../engine/sync";
 function Pad(props: any) {
   const { children, ...rest } = props;
   return (
-    <div className="w-20 h-20 rounded bg-slate-800 p-1.5 text-xs" {...rest}>
+    <div className="h-20 w-20 rounded bg-slate-800 p-1.5 text-xs" {...rest}>
       {children}
     </div>
   );

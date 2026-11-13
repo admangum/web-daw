@@ -9,7 +9,7 @@ interface Props {
 export function ButtonPlay({ className, onClick }: Props) {
   return (
     <ButtonBase
-      className={cx("flex items-center justify-center rounded-full group", className)}
+      className={cx("group flex items-center justify-center rounded-full", className)}
       onClick={onClick}
     >
       <Fill.Play className="size-icon" />

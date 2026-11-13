@@ -72,7 +72,7 @@ export function Keyboard({
     <div
       role="group"
       aria-label="Piano keyboard"
-      className={cx("overflow-x-hidden select-none touch-pan-y bg-slate-200", className)}
+      className={cx("touch-pan-y overflow-x-hidden bg-slate-200 select-none", className)}
       onClick={(event) => event.stopPropagation()}
       onPointerDown={handlePointerDown}
       onPointerMove={handlePointerMove}
@@ -110,7 +110,7 @@ const KeyboardKey = memo(function KeyboardKey({
       aria-label={noteName(note)}
       aria-pressed={pressed}
       className={cx(
-        "relative w-full cursor-pointer border-b border-slate-400 box-border",
+        "relative box-border w-full cursor-pointer border-b border-slate-400",
         black ? "bg-slate-200" : "bg-slate-100"
       )}
       style={{ height: KEY_HEIGHT }}
@@ -124,7 +124,7 @@ const KeyboardKey = memo(function KeyboardKey({
         )}
       />
       {isC(note) && (
-        <span className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[10px] leading-none text-slate-600">
+        <span className="pointer-events-none absolute top-1/2 right-1 -translate-y-1/2 text-[10px] leading-none text-slate-600">
           {noteName(note)}
         </span>
       )}
