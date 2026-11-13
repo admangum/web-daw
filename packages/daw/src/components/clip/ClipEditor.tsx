@@ -1,13 +1,19 @@
-import { useCallback, type CSSProperties } from "react";
+import { useCallback, type CSSProperties, type MouseEvent } from "react";
 import { noteToMidiNote, type MidiNote } from "audio-engine";
 import * as Sync from "../../engine/sync";
-import type { ClipData } from "../../stores/types";
+import type { ClipData, SoundData } from "../../stores/types";
 import { TimeRulerSpacer } from "../TimeRulerSpacer";
 import { TimeRuler } from "../Timeline";
 import { Keyboard } from "../piano/Keyboard";
-import { Grid } from "../piano/Grid";
+import { KEY_HEIGHT, NOTES_TOP_DOWN } from "../piano/constants";
+import { Grid } from "../grid/Grid";
 import { Button } from "@/ui";
 import { scrollTopForNote } from "../piano/util/key-layout";
+import { GridRow } from "../grid/GridRow";
+import { Sound } from "../sound/Sound";
+import { useProjectStore } from "../../stores/useProjectStore";
+import { useUIStore } from "../../stores/useUIStore";
+import { Playhead } from "../Playhead";
 
 interface Props {
   clip: ClipData;
@@ -15,6 +21,10 @@ interface Props {
   style?: CSSProperties;
 }
 export function ClipEditor({ clip, onCloseClick, style }: Props) {
+  const { bpm } = useProjectStore();
+  const { pixelsPerSecond } = useUIStore();
+  const bps = (bpm / 60) * 1;
+  const pixelsPerBeat = Math.round(pixelsPerSecond / bps);
   /**
    * On initial mount, center the lowest active midi note in the viewport
    */
@@ -34,18 +44,35 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     [clip]
   );
 
+  const onGridClick = (e: MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    const midiNote = parseInt(
+      (e.target as HTMLDivElement).dataset.gridRowId || "0",
+      10
+    ) as MidiNote;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
+    const startTime = clip.startTime + x / pixelsPerSecond;
+    Sync.addSoundAt(clip, midiNote, startTime);
+  };
+
+  const onSoundClick = (e: MouseEvent<HTMLDivElement>, sound: SoundData) => {
+    e.stopPropagation();
+    Sync.removeSound(clip, sound.id);
+  };
+
   return (
     <div
       style={style}
-      className="ease size-full scale-100 border-slate-700 bg-slate-900/85 opacity-100 transition duration-300 starting:scale-0 starting:opacity-0"
+      className="size-full bg-slate-900/85 border-slate-700 transition duration-300 ease starting:scale-0 scale-100 starting:opacity-0 opacity-100"
     >
       <div
         ref={gridRef}
-        className="grid h-full w-full scrollbar-none grid-cols-[--spacing(36)_1fr] grid-rows-[--h-6_1fr] overflow-auto"
+        className="grid grid-cols-[--spacing(36)_1fr] grid-rows-[--h-6_1fr] w-full h-full overflow-auto scrollbar-none"
       >
-        <Button.Close className="absolute top-8 right-2 z-40" onClick={onCloseClick} />
+        <Button.Close className="absolute z-40 right-2 top-8" onClick={onCloseClick} />
         {/* <!-- Top Left (0,0): Completely frozen --> */}
-        <div className="sticky top-0 left-0 z-30 bg-slate-900">
+        <div className="sticky top-0 left-0 z-30  bg-slate-900">
           <TimeRulerSpacer />
         </div>
 
@@ -61,7 +88,31 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
 
         {/* <!-- Bottom Right (1,1): Massive contents, free scrolling on both axes --> */}
         <div className="z-10">
-          <Grid clip={clip} />
+          <Grid rowHeight={KEY_HEIGHT} pixelsPerGridLine={pixelsPerBeat} onClick={onGridClick}>
+            {NOTES_TOP_DOWN.map((midiNote) => (
+              <GridRow key={midiNote} id={String(midiNote)}>
+                {clip.sounds.map((sound) => {
+                  if (sound.midiNote === midiNote) {
+                    return (
+                      <Sound
+                        key={sound.id}
+                        sound={sound}
+                        pos={{
+                          x: (sound.startTime - clip.startTime) * pixelsPerSecond,
+                          y: 0,
+                        }}
+                        size={{
+                          width: pixelsPerBeat,
+                        }}
+                        onClick={onSoundClick}
+                      />
+                    );
+                  }
+                })}
+              </GridRow>
+            ))}
+            <Playhead offset={clip.startTime} />
+          </Grid>
         </div>
       </div>
     </div>
