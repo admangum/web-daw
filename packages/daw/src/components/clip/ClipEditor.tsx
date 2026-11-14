@@ -11,9 +11,8 @@ import { Button } from "@/ui";
 import { scrollTopForNote } from "../piano/util/key-layout";
 import { GridRow } from "../grid/GridRow";
 import { Sound } from "../sound/Sound";
-import { useProjectStore } from "../../stores/useProjectStore";
-import { useUIStore } from "../../stores/useUIStore";
 import { Playhead } from "../Playhead";
+import { usePixels } from "../../hooks";
 
 interface Props {
   clip: ClipData;
@@ -21,10 +20,7 @@ interface Props {
   style?: CSSProperties;
 }
 export function ClipEditor({ clip, onCloseClick, style }: Props) {
-  const { bpm } = useProjectStore();
-  const { pixelsPerSecond } = useUIStore();
-  const bps = (bpm / 60) * 1;
-  const pixelsPerBeat = Math.round(pixelsPerSecond / bps);
+  const { pixelsPerBeat, pixelsPerSecond } = usePixels();
   /**
    * On initial mount, center the lowest active midi note in the viewport
    */
@@ -44,12 +40,9 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     [clip]
   );
 
-  const onGridClick = (e: MouseEvent<HTMLDivElement>) => {
+  const onGridRowClick = (e: MouseEvent<HTMLDivElement>, rowId: string) => {
     e.stopPropagation();
-    const midiNote = parseInt(
-      (e.target as HTMLDivElement).dataset.gridRowId || "0",
-      10
-    ) as MidiNote;
+    const midiNote = parseInt(rowId || "0", 10) as MidiNote;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
     const startTime = clip.startTime + x / pixelsPerSecond;
@@ -88,9 +81,14 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
 
         {/* <!-- Bottom Right (1,1): Massive contents, free scrolling on both axes --> */}
         <div className="z-10">
-          <Grid rowHeight={KEY_HEIGHT} pixelsPerGridLine={pixelsPerBeat} onClick={onGridClick}>
+          <Grid className="relative h-full w-full" spacing={pixelsPerBeat}>
             {NOTES_TOP_DOWN.map((midiNote) => (
-              <GridRow key={midiNote} id={String(midiNote)}>
+              <GridRow
+                id={String(midiNote)}
+                key={String(midiNote)}
+                style={{ height: `${KEY_HEIGHT}px` }}
+                onGridRowClick={onGridRowClick}
+              >
                 {clip.sounds.map((sound) => {
                   if (sound.midiNote === midiNote) {
                     return (

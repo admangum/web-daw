@@ -1,19 +1,30 @@
-import type { PropsWithChildren } from "react";
+import { cx } from "@/util";
+import { type CSSProperties, type PropsWithChildren, type MouseEvent, useRef } from "react";
 
 interface Props extends PropsWithChildren {
   id: string;
+  className?: string;
+  style?: CSSProperties;
+  onGridRowClick?: (e: MouseEvent<HTMLDivElement>, id: string) => void;
 }
 
-export function GridRow({ id, children, ...props }: Props) {
+export function GridRow({ id, className, style, onGridRowClick, children }: Props) {
+  const gridRowRef = useRef<HTMLDivElement | null>(null);
+  const onClick = (e: MouseEvent<HTMLDivElement>) => {
+    if (gridRowRef.current === e.target && onGridRowClick) {
+      onGridRowClick(e, id);
+    }
+  };
   return (
     <div
-      {...props}
-      data-grid-row-id={id}
-      className="c-grid-row relative box-border flex w-full items-center border-b border-slate-700"
-      style={{
-        height: `var(--grid-row-height)`,
-        backgroundImage: `repeating-linear-gradient(90deg, var(--color-slate-700) 0px, transparent 1px, transparent var(--pixels-per-grid-line))`,
-      }}
+      ref={gridRowRef}
+      key={id}
+      onClick={onClick}
+      style={style}
+      className={cx(
+        "relative box-border flex w-full items-center border-b border-slate-700",
+        className
+      )}
     >
       {children}
     </div>

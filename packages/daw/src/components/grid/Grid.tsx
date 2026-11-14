@@ -1,22 +1,18 @@
-import { type MouseEvent, type PropsWithChildren } from "react";
-import { cssVars } from "@/util";
+import { cx } from "@/util";
+import { type PropsWithChildren } from "react";
 
 interface Props extends PropsWithChildren {
-  rowHeight: number;
-  pixelsPerGridLine: number;
-  onClick: (e: MouseEvent<HTMLDivElement>) => void;
+  className?: string;
+  spacing: number;
 }
 
-export function Grid({ rowHeight, pixelsPerGridLine, onClick, children }: Props) {
+export function Grid({ spacing, className, children }: Props) {
   return (
     <div
-      id="clip-editor-grid"
-      className="relative"
-      onClick={onClick}
-      style={cssVars({
-        "--pixels-per-grid-line": `${pixelsPerGridLine}px`,
-        "--grid-row-height": `${rowHeight}px`,
-      })}
+      className={cx("relative", className)}
+      style={{
+        backgroundImage: `repeating-linear-gradient(90deg, var(--color-slate-700) 0px, transparent 1px, transparent ${spacing}px)`,
+      }}
     >
       {children}
     </div>
