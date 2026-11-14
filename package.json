@@ -12,10 +12,18 @@
     "lint": "turbo lint",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
-    "test:watch": "turbo test:watch"
+    "test:watch": "turbo test:watch",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.6.0",
+    "prettier": "3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "turbo": "^2.5.0",
     "typescript": "~6.0.2"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }
