@@ -4,9 +4,12 @@ import { ChannelRack } from "./components/ChannelRack";
 import { TrackHeader } from "./components/TrackHeader";
 import { TransportBar } from "./components/transport/TransportBar";
 import { useProjectStore } from "./stores/useProjectStore";
+import { useShortcuts } from "./hooks";
+import { defaultShortcuts } from "./shortcuts";
 
 function App() {
   const tracks = useProjectStore((s) => s.tracks);
+  useShortcuts(defaultShortcuts);
 
   return (
     <div className="bg-slate-1000 flex h-screen flex-col text-slate-100">
