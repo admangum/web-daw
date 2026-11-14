@@ -15,7 +15,7 @@ export function ChannelRack({ className }: Props) {
   return (
     <div
       className={cx(
-        `transition-all ease-out h-52 opacity-100 duration-250 starting:h-0 starting:opacity-0`,
+        `h-52 opacity-100 transition-all duration-250 ease-out starting:h-0 starting:opacity-0`,
         className
       )}
     >

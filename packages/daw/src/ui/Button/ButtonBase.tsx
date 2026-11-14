@@ -8,7 +8,7 @@ export function ButtonBase({ children, ref, className, ...props }: React.PropsWi
   return (
     <button
       className={cx(
-        "rounded flex items-center justify-center bg-slate-800 text-sm font-medium cursor-pointer text-slate-200 hover:bg-slate-700",
+        "flex cursor-pointer items-center justify-center rounded bg-slate-800 text-sm font-medium text-slate-200 hover:bg-slate-700",
         className
       )}
       ref={ref}

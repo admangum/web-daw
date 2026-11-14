@@ -5,6 +5,7 @@ import { useUIStore } from "../stores/useUIStore";
 import type { ClipData, TrackData } from "../stores/types";
 import React from "react";
 import { Clip } from "./clip/Clip";
+import { usePixels } from "../hooks";
 
 export const TIMELINE_WIDTH_SECONDS = 60;
 
@@ -13,17 +14,20 @@ interface Props {
 }
 
 export function TrackLane({ track, ...props }: Props) {
-  const { pixelsPerSecond, selectedTrackId } = useUIStore();
+  const { selectedTrackId } = useUIStore();
+  const { pixelsPerBeat, pixelsPerSecond } = usePixels();
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
 
   const laneDiv = React.useRef<HTMLDivElement>(null);
-  const onClick = (event: React.MouseEvent) => {
-    if (event.target !== laneDiv.current) {
+
+  const onClick = (e: React.MouseEvent) => {
+    if (e.target !== laneDiv.current) {
       return;
     }
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    Sync.addClipAt(track.id, x / pixelsPerSecond);
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
+    const startTime = x / pixelsPerSecond;
+    Sync.addClipAt(track.id, startTime);
   };
 
   const onDoubleClick = () => {};

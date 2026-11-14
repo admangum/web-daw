@@ -9,7 +9,7 @@ function App() {
   const tracks = useProjectStore((s) => s.tracks);
 
   return (
-    <div className="flex flex-col h-screen bg-slate-1000 text-slate-100">
+    <div className="bg-slate-1000 flex h-screen flex-col text-slate-100">
       <TransportBar />
       <div id="main" className="relative flex flex-1 overflow-y-scroll">
         <div className="flex w-54 shrink-0 flex-col border-r border-slate-800">

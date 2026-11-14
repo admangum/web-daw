@@ -26,7 +26,7 @@ export function TrackHeader({ track, ...props }: Props) {
   return (
     <div
       {...props}
-      className={`flex flex-col gap-2 h-18 shrink-0 border-b border-slate-800 ${bg} p-2`}
+      className={`flex h-18 shrink-0 flex-col gap-2 border-b border-slate-800 ${bg} p-2`}
       onClick={onClick}
       onDoubleClick={onDoubleClick}
     >

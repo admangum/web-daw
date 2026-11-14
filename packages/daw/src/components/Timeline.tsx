@@ -1,5 +1,8 @@
+import { usePixels } from "../hooks";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useUIStore } from "../stores/useUIStore";
+import { Grid } from "./grid/Grid";
+import { GridRow } from "./grid/GridRow";
 import { Playhead } from "./Playhead";
 import { TIMELINE_WIDTH_SECONDS, TrackLane } from "./TrackLane";
 
@@ -31,16 +34,18 @@ interface Props {
 
 export function Timeline({ ...props }: Props) {
   const tracks = useProjectStore((s) => s.tracks);
-
+  const { pixelsPerBeat } = usePixels();
   return (
     <div {...props}>
       <TimeRuler />
-      <div className="relative">
+      <Grid spacing={pixelsPerBeat}>
         {tracks.map((track) => (
-          <TrackLane key={track.id} track={track} />
+          <GridRow key={track.id} id={track.id}>
+            <TrackLane track={track} />
+          </GridRow>
         ))}
         <Playhead />
-      </div>
+      </Grid>
     </div>
   );
 }

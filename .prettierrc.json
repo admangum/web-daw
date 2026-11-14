@@ -6,5 +6,13 @@
   "trailingComma": "es5",
   "printWidth": 100,
   "bracketSpacing": true,
-  "arrowParens": "always"
+  "arrowParens": "always",
+  "overrides": [
+    {
+      "files": ["packages/daw/**/*"],
+      "options": {
+        "plugins": ["prettier-plugin-tailwindcss"]
+      }
+    }
+  ]
 }

@@ -14,7 +14,7 @@ export function ButtonComboPlayRecord({ isPlaying, onPlayClick, onStopClick, cla
   return (
     <div
       className={cx(
-        "flex justify-center gap-2 bg-slate-800/80 px-2 py-2 rounded-full fill-slate-200",
+        "flex justify-center gap-2 rounded-full bg-slate-800/80 fill-slate-200 px-2 py-2",
         className
       )}
     >
