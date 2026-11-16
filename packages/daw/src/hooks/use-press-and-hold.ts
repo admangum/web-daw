@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 const DEFAULT_THRESHOLD_MILLISECONDS = 250;
 
@@ -13,32 +13,32 @@ interface Options {
 }
 
 export function usePressAndHold(
-  onPressAndHold: (event: React.MouseEvent) => void,
-  options: Options = {}
+  onPressAndHold: (event: React.PointerEvent) => void,
+  { threshold = DEFAULT_THRESHOLD_MILLISECONDS }: Options = {}
 ) {
-  const { threshold } = Object.assign({ threshold: DEFAULT_THRESHOLD_MILLISECONDS }, options);
-  const timer = React.useRef<number | null>(null);
+  const timer = useRef<number | null>(null);
+  const callback = useRef(onPressAndHold);
 
-  const onMouseDown = (event: React.MouseEvent) => {
-    timer.current = setTimeout(() => {
-      onPressAndHold(event);
+  useEffect(() => {
+    callback.current = onPressAndHold;
+  });
+
+  function clear() {
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
       timer.current = null;
+    }
+  }
+
+  useEffect(() => clear, []);
+
+  const onPointerDown = (event: React.PointerEvent) => {
+    clear();
+    timer.current = window.setTimeout(() => {
+      timer.current = null;
+      callback.current(event);
     }, threshold);
   };
 
-  const onMouseUp = () => {
-    if (typeof timer.current === "number") {
-      clearInterval(timer.current);
-      timer.current = null;
-    }
-  };
-
-  React.useEffect(() => () => {
-    if (typeof timer.current === "number") {
-      clearInterval(timer.current);
-      timer.current = null;
-    }
-  });
-
-  return [onMouseDown, onMouseUp] as const;
+  return { onPointerDown, onPointerUp: clear, onPointerLeave: clear, onPointerCancel: clear };
 }
