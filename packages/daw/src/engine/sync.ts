@@ -2,7 +2,7 @@ import { Clip, Sound, type MidiNote, type Note } from "audio-engine";
 import { engine } from "./engine";
 import { useProjectStore } from "../stores/useProjectStore";
 import { useTransportStore } from "../stores/useTransportStore";
-import type { ClipData, TrackData } from "../stores/types";
+import type { ClipData, SoundData, TrackData } from "../stores/types";
 import { DEFAULT_INSTRUMENT_ID, getInstrumentDef } from "../instruments/catalog";
 import { useUIStore } from "../stores/useUIStore";
 
@@ -116,31 +116,26 @@ export function removeClip(id: string): void {
 }
 
 export function addSoundAt(
-  clip: ClipData,
+  clipId: string,
   midiNote: MidiNote,
   startTime: number,
   duration: number = 0.5
 ) {
-  const sound = {
+  const sound: SoundData = {
     id: crypto.randomUUID(),
-    clipId: clip.id,
+    clipId,
     startTime: Math.max(0, startTime),
     duration,
     offset: 0,
     midiNote,
   };
-  clip.sounds.push(sound);
-  useProjectStore.getState().updateClip(clip.id, clip);
+  useProjectStore.getState().addSound(clipId, sound);
   pushClipsToEngine();
 }
 
-export function removeSound(clip: ClipData, id: string) {
-  const soundIdx = clip.sounds.findIndex((s) => s.id === id);
-  if (soundIdx > -1) {
-    clip.sounds.splice(soundIdx, 1);
-    useProjectStore.getState().updateClip(clip.id, clip);
-    pushClipsToEngine();
-  }
+export function removeSound(clipId: string, soundId: string) {
+  useProjectStore.getState().removeSound(clipId, soundId);
+  pushClipsToEngine();
 }
 
 export async function play(): Promise<void> {

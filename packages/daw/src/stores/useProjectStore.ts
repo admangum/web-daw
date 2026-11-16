@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ClipData, TrackData } from "./types";
+import type { ClipData, SoundData, TrackData } from "./types";
 
 interface ProjectState {
   name: string;
@@ -13,6 +13,8 @@ interface ProjectState {
   addClip: (clip: ClipData) => void;
   removeClip: (id: string) => void;
   updateClip: (id: string, patch: Partial<ClipData>) => void;
+  addSound: (clipId: string, sound: SoundData) => void;
+  removeSound: (clipId: string, soundId: string) => void;
 }
 
 /**
@@ -45,4 +47,20 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   updateClip: (id, patch) =>
     set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...patch } : c)) })),
+
+  addSound: (clipId, sound) =>
+    set((s) => {
+      return {
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, sounds: [...c.sounds, sound] } : c)),
+      };
+    }),
+
+  removeSound: (clipId, soundId) =>
+    set((s) => {
+      return {
+        clips: s.clips.map((c) =>
+          c.id === clipId ? { ...c, sounds: c.sounds.filter((x) => x.id !== soundId) } : c
+        ),
+      };
+    }),
 }));
