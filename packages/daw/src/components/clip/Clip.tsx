@@ -25,6 +25,7 @@ interface Props {
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   const { selectedTrackId, selectTrack, editingClipId, setEditingClipId } = useUIStore();
+  const isEditing = useUIStore((s) => s.editingClipId === clip.id);
   const { isPlaying } = useTransportStore();
 
   const [clickPos, setClickPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -47,7 +48,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
     }
   };
 
-  const [onMouseDown, onMouseUp] = usePressAndHold(
+  const pressAndHoldProps = usePressAndHold(
     (event) => {
       setClickPos({ x: event.pageX, y: event.pageY });
       onOpenClipEditor();
@@ -56,13 +57,12 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   );
 
   return (
-    <Dialog.Root {...props} open={!!editingClipId} modal={false}>
+    <Dialog.Root {...props} open={isEditing} modal={false}>
       <Dialog.Trigger asChild>
         <ClipContent
           title="Click to remove"
           onClick={() => onClick(clip, !!editingClipId)}
-          onMouseDown={onMouseDown}
-          onMouseUp={onMouseUp}
+          {...pressAndHoldProps}
           className="absolute h-18 cursor-pointer overflow-hidden bg-slate-700/80 transition-colors delay-100 duration-300 hover:bg-slate-500/80 active:bg-slate-400/80"
           style={{
             translate: `${pos.x}px var(--tw-translate-y)`,

@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { ClipData, TrackData } from "./types";
+import type { ClipData, SoundData, TrackData } from "./types";
 
 interface ProjectState {
   name: string;
@@ -9,10 +9,11 @@ interface ProjectState {
   addTrack: (track: TrackData) => void;
   removeTrack: (id: string) => void;
   updateTrack: (id: string, patch: Partial<TrackData>) => void;
-  getClip: (id: string) => ClipData;
   addClip: (clip: ClipData) => void;
   removeClip: (id: string) => void;
   updateClip: (id: string, patch: Partial<ClipData>) => void;
+  addSound: (clipId: string, sound: SoundData) => void;
+  removeSound: (clipId: string, soundId: string) => void;
 }
 
 /**
@@ -20,12 +21,11 @@ interface ProjectState {
  * here only touch this store; engine wiring lives in engine/sync.ts, which
  * is the sole translator between this state and the live audio-engine graph.
  */
-export const useProjectStore = create<ProjectState>((set, get) => ({
+export const useProjectStore = create<ProjectState>((set) => ({
   name: "Untitled Project",
   bpm: 120,
   tracks: [],
   clips: [],
-  getClip: (id) => get().clips.find((c) => c.id === id)!,
   addTrack: (track) => set((s) => ({ tracks: [...s.tracks, track] })),
 
   removeTrack: (id) =>
@@ -45,4 +45,20 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   updateClip: (id, patch) =>
     set((s) => ({ clips: s.clips.map((c) => (c.id === id ? { ...c, ...patch } : c)) })),
+
+  addSound: (clipId, sound) =>
+    set((s) => {
+      return {
+        clips: s.clips.map((c) => (c.id === clipId ? { ...c, sounds: [...c.sounds, sound] } : c)),
+      };
+    }),
+
+  removeSound: (clipId, soundId) =>
+    set((s) => {
+      return {
+        clips: s.clips.map((c) =>
+          c.id === clipId ? { ...c, sounds: c.sounds.filter((x) => x.id !== soundId) } : c
+        ),
+      };
+    }),
 }));

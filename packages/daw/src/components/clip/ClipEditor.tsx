@@ -46,12 +46,12 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     const rect = e.currentTarget.getBoundingClientRect();
     const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
     const startTime = clip.startTime + x / pixelsPerSecond;
-    Sync.addSoundAt(clip, midiNote, startTime);
+    Sync.addSoundAt(clip.id, midiNote, startTime);
   };
 
   const onSoundClick = (e: MouseEvent<HTMLDivElement>, sound: SoundData) => {
     e.stopPropagation();
-    Sync.removeSound(clip, sound.id);
+    Sync.removeSound(clip.id, sound.id);
   };
 
   return (
