@@ -25,6 +25,7 @@ interface Props {
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   const { selectedTrackId, selectTrack, editingClipId, setEditingClipId } = useUIStore();
+  const isEditing = useUIStore((s) => s.editingClipId === clip.id);
   const { isPlaying } = useTransportStore();
 
   const [clickPos, setClickPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -56,7 +57,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
   );
 
   return (
-    <Dialog.Root {...props} open={!!editingClipId} modal={false}>
+    <Dialog.Root {...props} open={isEditing} modal={false}>
       <Dialog.Trigger asChild>
         <ClipContent
           title="Click to remove"
