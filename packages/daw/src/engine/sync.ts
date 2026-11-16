@@ -153,13 +153,12 @@ export function stop(): void {
   engine.stop();
   useTransportStore.getState().setIsPlaying(false);
   const editingClipId = useUIStore.getState().editingClipId;
-  if (editingClipId) {
-    const editingClip = useProjectStore.getState().getClip(editingClipId);
-    useTransportStore.getState().setPlaybackPosition(editingClip.startTime);
-    engine.transport.seek(editingClip.startTime);
-  } else {
-    useTransportStore.getState().setPlaybackPosition(0);
-  }
+
+  const editingClip = useProjectStore.getState().clips.find((c) => c.id === editingClipId);
+  const position = editingClip?.startTime ?? 0;
+  useTransportStore.getState().setPlaybackPosition(position);
+
+  if (editingClip) engine.transport.seek(editingClip.startTime);
 }
 
 export function seek(position: number): void {
