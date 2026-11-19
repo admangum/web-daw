@@ -137,11 +137,11 @@ Depends on `audio-engine` via `"audio-engine": "workspace:*"`.
 
 ### Zustand stores
 
-| Store               | State                                                                      |
-| ------------------- | -------------------------------------------------------------------------- |
-| `useProjectStore`   | `tracks: TrackData[]`, `clips: ClipData[]`, project name/bpm               |
-| `useTransportStore` | `isPlaying`, `bpm`, `loop`, `playbackPosition` (snapshot only — see below) |
-| `useUIStore`        | `selectedTrackId`, `pixelsPerSecond`                                       |
+| Store               | State                                                               |
+| ------------------- | ------------------------------------------------------------------- |
+| `useProjectStore`   | `tracks: TrackData[]`, `clips: ClipData[]`, project name/bpm        |
+| `useTransportStore` | `isPlaying`, `loop`, `playbackPosition` (snapshot only — see below) |
+| `useUIStore`        | `selectedTrackId`, `pixelsPerSecond`                                |
 
 Stores hold **plain serializable data only** — no `AudioNode`/`AudioBuffer`. `ClipData.bufferId` is a key into an engine-side `Map<string, AudioBuffer>` cache (`engine/bufferCache.ts`), not the buffer itself.
 

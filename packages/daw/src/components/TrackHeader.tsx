@@ -1,3 +1,4 @@
+import { useShallow } from "zustand/shallow";
 import { setTrackMuted, setTrackSoloed } from "../engine/sync";
 import type { TrackData } from "../stores/types";
 import { useUIStore } from "../stores/useUIStore";
@@ -8,20 +9,23 @@ interface Props {
 }
 
 export function TrackHeader({ track, ...props }: Props) {
-  const { setEditingTrackId, selectTrack, selectedTrackId } = useUIStore();
+  const { isSelected, selectTrack, setEditingTrackId } = useUIStore(
+    useShallow((s) => ({
+      isSelected: s.selectedTrackId === track.id,
+      selectTrack: s.selectTrack,
+      setEditingTrackId: s.setEditingTrackId,
+    }))
+  );
+
   const onClick = () => {
-    if (selectedTrackId === track.id) {
-      selectTrack(null);
-    } else {
-      selectTrack(track.id);
-    }
+    selectTrack(isSelected ? null : track.id);
   };
 
   const onDoubleClick = () => {
     setEditingTrackId(track.id);
   };
 
-  const bg = selectedTrackId === track.id ? "bg-slate-900" : "bg-transparent";
+  const bg = isSelected ? "bg-slate-900" : "bg-transparent";
 
   return (
     <div

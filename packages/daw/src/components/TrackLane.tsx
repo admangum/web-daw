@@ -14,7 +14,7 @@ interface Props {
 }
 
 export function TrackLane({ track, ...props }: Props) {
-  const { selectedTrackId } = useUIStore();
+  const isSelected = useUIStore((s) => s.selectedTrackId === track.id);
   const { pixelsPerBeat, pixelsPerSecond } = usePixels();
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
 
@@ -38,10 +38,9 @@ export function TrackLane({ track, ...props }: Props) {
     }
   };
 
-  const bg =
-    selectedTrackId === track.id
-      ? "bg-[repeating-linear-gradient(135deg,--alpha(var(--color-slate-200)/12%)_0,--alpha(var(--color-slate-200)/12%)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-top-left"
-      : "bg-transparent";
+  const bg = isSelected
+    ? "bg-[repeating-linear-gradient(135deg,--alpha(var(--color-slate-200)/12%)_0,--alpha(var(--color-slate-200)/12%)_1px,transparent_0,transparent_50%)] bg-size-[10px_10px] bg-top-left"
+    : "bg-transparent";
 
   return (
     <div
