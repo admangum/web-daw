@@ -25,9 +25,9 @@ interface Props {
   size: Size;
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
-  const { selectTrack, editingClipId, setEditingClipId } = useUIStore(
+  const { setSelectedTrackId, editingClipId, setEditingClipId } = useUIStore(
     useShallow((s) => ({
-      selectTrack: s.selectTrack,
+      setSelectedTrackId: s.setSelectedTrackId,
       editingClipId: s.editingClipId,
       setEditingClipId: s.setEditingClipId,
     }))
@@ -41,7 +41,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
 
   const onOpenClipEditor = () => {
     if (useUIStore.getState().selectedTrackId !== clip.trackId) {
-      selectTrack(clip.trackId);
+      setSelectedTrackId(clip.trackId);
     }
     setEditingClipId(clip.id);
     transportTimeAtOpen.current = getTransportPosition();

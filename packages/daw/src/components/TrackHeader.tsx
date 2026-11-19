@@ -9,16 +9,16 @@ interface Props {
 }
 
 export function TrackHeader({ track, ...props }: Props) {
-  const { isSelected, selectTrack, setEditingTrackId } = useUIStore(
+  const { isSelected, setSelectedTrackId, setEditingTrackId } = useUIStore(
     useShallow((s) => ({
       isSelected: s.selectedTrackId === track.id,
-      selectTrack: s.selectTrack,
+      setSelectedTrackId: s.setSelectedTrackId,
       setEditingTrackId: s.setEditingTrackId,
     }))
   );
 
   const onClick = () => {
-    selectTrack(isSelected ? null : track.id);
+    setSelectedTrackId(isSelected ? null : track.id);
   };
 
   const onDoubleClick = () => {
