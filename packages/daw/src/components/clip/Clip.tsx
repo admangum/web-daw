@@ -7,6 +7,7 @@ import { useUIStore } from "../../stores/useUIStore";
 import { getTransportPosition, seek } from "../../engine/sync";
 import { useTransportStore } from "../../stores/useTransportStore";
 import { ClipContent } from "./ClipContent";
+import { useShallow } from "zustand/shallow";
 
 interface Pos {
   x: number;
@@ -24,17 +25,23 @@ interface Props {
   size: Size;
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
-  const { selectedTrackId, selectTrack, editingClipId, setEditingClipId } = useUIStore();
+  const { setSelectedTrackId, editingClipId, setEditingClipId } = useUIStore(
+    useShallow((s) => ({
+      setSelectedTrackId: s.setSelectedTrackId,
+      editingClipId: s.editingClipId,
+      setEditingClipId: s.setEditingClipId,
+    }))
+  );
+
   const isEditing = useUIStore((s) => s.editingClipId === clip.id);
-  const { isPlaying } = useTransportStore();
 
   const [clickPos, setClickPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const transportTimeAtOpen = useRef<number>(0);
 
   const onOpenClipEditor = () => {
-    if (selectedTrackId !== clip.trackId) {
-      selectTrack(clip.trackId);
+    if (useUIStore.getState().selectedTrackId !== clip.trackId) {
+      setSelectedTrackId(clip.trackId);
     }
     setEditingClipId(clip.id);
     transportTimeAtOpen.current = getTransportPosition();
@@ -43,7 +50,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
 
   const onCloseClipEditor = () => {
     setEditingClipId(null);
-    if (!isPlaying) {
+    if (!useTransportStore.getState().isPlaying) {
       seek(transportTimeAtOpen.current);
     }
   };

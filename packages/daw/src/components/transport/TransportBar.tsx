@@ -5,7 +5,7 @@ import { useProjectStore } from "../../stores/useProjectStore";
 
 export function TransportBar() {
   const isPlaying = useTransportStore((s) => s.isPlaying);
-  const { bpm } = useProjectStore();
+  const bpm = useProjectStore((s) => s.bpm);
   const [nextTrackNumber, setNextTrackNumber] = useState(1);
   return (
     <div className="flex h-22 shrink-0 items-center border-b border-slate-800 px-4">
