@@ -11,6 +11,11 @@ import { useUIStore } from "../stores/useUIStore";
  * ClipData/TrackData and audio-engine's live Track/Clip graph. Components
  * and store actions should call these functions rather than reaching into
  * `engine` or the store's setters directly.
+ *
+ * Ordering: update the engine first, then the store, so a failure never leaves
+ * the store claiming something the engine didn't do. Clip/sound operations are
+ * the exception: they change the store first because pushClipsToEngine()
+ * rebuilds the engine graph from it.
  */
 
 function pushClipsToEngine(): void {
@@ -42,6 +47,12 @@ function pushClipsToEngine(): void {
     .filter((clip): clip is Clip => clip !== null);
 
   engine.setClips(engineClips);
+}
+
+function getStopPosition() {
+  const editingClipId = useUIStore.getState().editingClipId;
+  const clip = useProjectStore.getState().clips.find((c) => c.id === editingClipId);
+  return clip?.startTime ?? 0;
 }
 
 export function addTrack(name: string): void {
@@ -82,12 +93,12 @@ export function setTrackSoloed(id: string, soloed: boolean): void {
 }
 
 export function setTrackInstrument(id: string, instrumentId: string): void {
-  useProjectStore.getState().updateTrack(id, { instrumentId });
   const track = engine.getTrack(id);
   const instrumentDef = getInstrumentDef(instrumentId);
-  if (instrumentDef && track) {
-    track?.setInstrument(instrumentDef);
-  }
+  if (!track || !instrumentDef) return;
+
+  track.setInstrument(instrumentDef);
+  useProjectStore.getState().updateTrack(id, { instrumentId });
 }
 
 export function playTrackInstrument(id: string, note: Note | MidiNote): void {
@@ -152,13 +163,7 @@ export function pause(): void {
 export function stop(): void {
   engine.stop();
   useTransportStore.getState().setIsPlaying(false);
-  const editingClipId = useUIStore.getState().editingClipId;
-
-  const editingClip = useProjectStore.getState().clips.find((c) => c.id === editingClipId);
-  const position = editingClip?.startTime ?? 0;
-  useTransportStore.getState().setPlaybackPosition(position);
-
-  if (editingClip) engine.transport.seek(editingClip.startTime);
+  seek(getStopPosition());
 }
 
 export function seek(position: number): void {
