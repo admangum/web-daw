@@ -6,6 +6,7 @@ import type { ClipData, TrackData } from "../stores/types";
 import React from "react";
 import { Clip } from "./clip/Clip";
 import { usePixels } from "../hooks";
+import { snapToBeat } from "@/util";
 
 export const TIMELINE_WIDTH_SECONDS = 60;
 
@@ -24,9 +25,12 @@ export function TrackLane({ track, ...props }: Props) {
     if (e.target !== e.currentTarget) {
       return;
     }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
-    const startTime = x / pixelsPerSecond;
+    const startTime = snapToBeat({
+      clientX: e.clientX,
+      rectLeft: e.currentTarget.getBoundingClientRect().left,
+      pixelsPerBeat,
+      pixelsPerSecond,
+    });
     Sync.addClipAt(track.id, startTime);
   };
 
