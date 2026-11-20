@@ -51,6 +51,13 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     Sync.removeSound(clip.id, sound.id);
   };
 
+  const soundsByNote = new Map<MidiNote, SoundData[]>();
+  for (const sound of clip.sounds) {
+    const list = soundsByNote.get(sound.midiNote);
+    if (list) list.push(sound);
+    else soundsByNote.set(sound.midiNote, [sound]);
+  }
+
   return (
     <div
       style={style}
@@ -86,23 +93,21 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
                 style={{ height: `${KEY_HEIGHT}px` }}
                 onGridRowClick={onGridRowClick}
               >
-                {clip.sounds.map((sound) => {
-                  if (sound.midiNote === midiNote) {
-                    return (
-                      <Sound
-                        key={sound.id}
-                        sound={sound}
-                        pos={{
-                          x: (sound.startTime - clip.startTime) * pixelsPerSecond,
-                          y: 0,
-                        }}
-                        size={{
-                          width: pixelsPerBeat,
-                        }}
-                        onClick={onSoundClick}
-                      />
-                    );
-                  }
+                {soundsByNote.get(midiNote)?.map((sound) => {
+                  return (
+                    <Sound
+                      key={sound.id}
+                      sound={sound}
+                      pos={{
+                        x: (sound.startTime - clip.startTime) * pixelsPerSecond,
+                        y: 0,
+                      }}
+                      size={{
+                        width: pixelsPerBeat,
+                      }}
+                      onClick={onSoundClick}
+                    />
+                  );
                 })}
               </GridRow>
             ))}
