@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useEffectEvent, useRef } from "react";
 import { engine } from "../engine/engine";
 import { useUIStore } from "../stores/useUIStore";
 
@@ -20,20 +20,22 @@ export function Playhead({ offset = 0 }: Props) {
   const lineRef = useRef<HTMLDivElement>(null);
   const pixelsPerSecond = useUIStore((s) => s.pixelsPerSecond);
 
+  const updatePosition = useEffectEvent(() => {
+    const position = Math.max(engine.transport.getPosition() - offset, 0);
+    if (lineRef.current) {
+      lineRef.current.style.transform = `translateX(${position * pixelsPerSecond}px)`;
+    }
+  });
+
   useEffect(() => {
     let frame: number;
-
     const tick = () => {
-      const position = Math.max(engine.transport.getPosition() - offset, 0);
-      if (lineRef.current) {
-        lineRef.current.style.transform = `translateX(${position * pixelsPerSecond}px)`;
-      }
+      updatePosition();
       frame = requestAnimationFrame(tick);
     };
-
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
-  }, [pixelsPerSecond, offset]);
+  }, []);
 
   return (
     <div
