@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ClipData } from "../../stores/types";
 import { useUIStore } from "../../stores/useUIStore";
 import { SOUND_RECT_HEIGHT, layoutSounds } from "./util/preview-layout";
@@ -11,7 +11,7 @@ interface Props extends React.ComponentProps<"div"> {
 }
 export function ClipContent({ clip, ...props }: Props) {
   const pixelsPerSecond = useUIStore((s) => s.pixelsPerSecond);
-  const rects = React.useMemo(
+  const rects = useMemo(
     () => layoutSounds(clip, pixelsPerSecond, CLIP_HEIGHT),
     [clip, pixelsPerSecond]
   );

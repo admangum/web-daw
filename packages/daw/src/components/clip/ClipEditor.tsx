@@ -33,12 +33,9 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     // oxlint-disable-next-line react-hooks/exhaustive-deps - A onetime effect on initial mount
   }, []);
 
-  const onPianoKeyPress = useCallback(
-    (midiNote: MidiNote) => {
-      Sync.playTrackInstrument(clip.trackId, midiNote);
-    },
-    [clip]
-  );
+  const onPianoKeyPress = (midiNote: MidiNote) => {
+    Sync.playTrackInstrument(clip.trackId, midiNote);
+  };
 
   const onGridRowClick = (e: MouseEvent<HTMLDivElement>, rowId: string) => {
     e.stopPropagation();
