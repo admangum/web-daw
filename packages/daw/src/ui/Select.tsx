@@ -1,20 +1,25 @@
+import { cx } from "@/util";
 import { Select as S } from "radix-ui";
 import React from "react";
-interface Props {
+interface Props extends Omit<
+  React.ComponentPropsWithRef<typeof S.Trigger>,
+  "value" | "children" | "defaultValue"
+> {
   placeholder: string;
   items: { label: string; value: string }[];
   value: string;
   onValueChange: (value: string) => void;
 }
-export function Select({
-  placeholder,
-  items,
-  value,
-  onValueChange,
-}: React.PropsWithChildren<Props>) {
+export function Select({ placeholder, items, value, onValueChange, className, ...props }: Props) {
   return (
     <S.Root value={value} onValueChange={onValueChange}>
-      <S.Trigger className="rounded bg-slate-800 px-1.5 py-1 text-sm font-medium text-slate-200 hover:bg-slate-700">
+      <S.Trigger
+        {...props}
+        className={cx(
+          "rounded bg-slate-800 px-1.5 py-1 text-sm font-medium text-slate-200 hover:bg-slate-700",
+          className
+        )}
+      >
         <S.Value placeholder={placeholder} aria-label={value}></S.Value>
       </S.Trigger>
       <S.Portal>

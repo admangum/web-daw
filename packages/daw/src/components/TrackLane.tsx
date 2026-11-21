@@ -6,6 +6,7 @@ import type { ClipData, TrackData } from "../stores/types";
 import React from "react";
 import { Clip } from "./clip/Clip";
 import { usePixels } from "../hooks";
+import { snapToBeat } from "@/util";
 
 export const TIMELINE_WIDTH_SECONDS = 60;
 
@@ -18,19 +19,20 @@ export function TrackLane({ track, ...props }: Props) {
   const { pixelsPerBeat, pixelsPerSecond } = usePixels();
   const clips = useProjectStore(useShallow((s) => s.clips.filter((c) => c.trackId === track.id)));
 
-  const laneDiv = React.useRef<HTMLDivElement>(null);
-
   const onClick = (e: React.MouseEvent) => {
-    if (e.target !== laneDiv.current) {
+    // Only proceed if the lane itself was clicked. Clicking anything
+    // already in the lane (like a clip) should not be handled here.
+    if (e.target !== e.currentTarget) {
       return;
     }
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
-    const startTime = x / pixelsPerSecond;
+    const startTime = snapToBeat({
+      clientX: e.clientX,
+      rectLeft: e.currentTarget.getBoundingClientRect().left,
+      pixelsPerBeat,
+      pixelsPerSecond,
+    });
     Sync.addClipAt(track.id, startTime);
   };
-
-  const onDoubleClick = () => {};
 
   const onClipClick = (clip: ClipData, isEditing: boolean) => {
     if (!isEditing) {
@@ -50,8 +52,6 @@ export function TrackLane({ track, ...props }: Props) {
         width: TIMELINE_WIDTH_SECONDS * pixelsPerSecond,
       }}
       onClick={onClick}
-      onDoubleClick={onDoubleClick}
-      ref={laneDiv}
     >
       {clips.map((clip) => (
         <Clip

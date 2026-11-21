@@ -1,16 +1,12 @@
 import { Fill } from "@/ui/icons";
-import { ButtonBase } from "./ButtonBase";
+import { ButtonBase, type IconButtonProps } from "./ButtonBase";
 import { cx } from "@/util";
 
-interface Props {
-  className?: string;
-  onClick?: () => void;
-}
-export function ButtonStop({ className, onClick }: Props) {
+export function ButtonStop({ className, ...props }: IconButtonProps) {
   return (
     <ButtonBase
       className={cx("flex items-center justify-center rounded-full", className)}
-      onClick={onClick}
+      {...props}
     >
       <Fill.Stop className="size-icon translate-x-[-2px] translate-y-[0px] fill-red-600/80" />
     </ButtonBase>

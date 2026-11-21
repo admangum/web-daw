@@ -55,7 +55,15 @@ function getStopPosition() {
   return clip?.startTime ?? 0;
 }
 
-export function addTrack(name: string): void {
+function getNextTrackName() {
+  const { tracks } = useProjectStore.getState();
+  const used = new Set(tracks.map((t) => t.name));
+  let n = tracks.length + 1;
+  while (used.has(`Track ${n}`)) n++;
+  return `Track ${n}`;
+}
+
+export function addTrack(name: string = getNextTrackName()): void {
   const id = crypto.randomUUID();
   const track: TrackData = {
     id,

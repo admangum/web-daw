@@ -8,6 +8,7 @@ import { Keyboard } from "../piano/Keyboard";
 import { KEY_HEIGHT, NOTES_TOP_DOWN } from "../piano/constants";
 import { Grid } from "../grid/Grid";
 import { Button } from "@/ui";
+import { snapToBeat } from "@/util";
 import { scrollTopForNote } from "../piano/util/key-layout";
 import { GridRow } from "../grid/GridRow";
 import { Sound } from "../sound/Sound";
@@ -33,19 +34,21 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     // oxlint-disable-next-line react-hooks/exhaustive-deps - A onetime effect on initial mount
   }, []);
 
-  const onPianoKeyPress = useCallback(
-    (midiNote: MidiNote) => {
-      Sync.playTrackInstrument(clip.trackId, midiNote);
-    },
-    [clip]
-  );
+  const onPianoKeyPress = (midiNote: MidiNote) => {
+    Sync.playTrackInstrument(clip.trackId, midiNote);
+  };
 
   const onGridRowClick = (e: MouseEvent<HTMLDivElement>, rowId: string) => {
     e.stopPropagation();
     const midiNote = parseInt(rowId || "0", 10) as MidiNote;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / pixelsPerBeat) * pixelsPerBeat;
-    const startTime = clip.startTime + x / pixelsPerSecond;
+    const startTime =
+      clip.startTime +
+      snapToBeat({
+        clientX: e.clientX,
+        rectLeft: e.currentTarget.getBoundingClientRect().left,
+        pixelsPerBeat,
+        pixelsPerSecond,
+      });
     Sync.addSoundAt(clip.id, midiNote, startTime);
   };
 
@@ -53,6 +56,13 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
     e.stopPropagation();
     Sync.removeSound(clip.id, sound.id);
   };
+
+  const soundsByNote = new Map<MidiNote, SoundData[]>();
+  for (const sound of clip.sounds) {
+    const list = soundsByNote.get(sound.midiNote);
+    if (list) list.push(sound);
+    else soundsByNote.set(sound.midiNote, [sound]);
+  }
 
   return (
     <div
@@ -89,23 +99,21 @@ export function ClipEditor({ clip, onCloseClick, style }: Props) {
                 style={{ height: `${KEY_HEIGHT}px` }}
                 onGridRowClick={onGridRowClick}
               >
-                {clip.sounds.map((sound) => {
-                  if (sound.midiNote === midiNote) {
-                    return (
-                      <Sound
-                        key={sound.id}
-                        sound={sound}
-                        pos={{
-                          x: (sound.startTime - clip.startTime) * pixelsPerSecond,
-                          y: 0,
-                        }}
-                        size={{
-                          width: pixelsPerBeat,
-                        }}
-                        onClick={onSoundClick}
-                      />
-                    );
-                  }
+                {soundsByNote.get(midiNote)?.map((sound) => {
+                  return (
+                    <Sound
+                      key={sound.id}
+                      sound={sound}
+                      pos={{
+                        x: (sound.startTime - clip.startTime) * pixelsPerSecond,
+                        y: 0,
+                      }}
+                      size={{
+                        width: pixelsPerBeat,
+                      }}
+                      onClick={onSoundClick}
+                    />
+                  );
                 })}
               </GridRow>
             ))}

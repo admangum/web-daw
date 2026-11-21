@@ -1,6 +1,8 @@
 import React from "react";
 import { cx } from "@/util";
 
+export type IconButtonProps = Omit<React.ComponentPropsWithRef<"button">, "children">;
+
 interface Props extends React.ComponentPropsWithRef<"button"> {
   className?: string;
 }

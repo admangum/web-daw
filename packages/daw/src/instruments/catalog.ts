@@ -18,7 +18,7 @@ const INSTRUMENTS: [string, InstrumentDefinition][] = [
       name: "Drum Kit Beta",
       kind: "sampler",
       options: {
-        sampleURLMap: DrumKitA,
+        sampleURLMap: {},
       },
     },
   ],

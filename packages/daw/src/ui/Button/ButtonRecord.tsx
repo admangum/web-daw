@@ -1,13 +1,13 @@
 import { Fill } from "@/ui/icons";
-import { ButtonBase } from "./ButtonBase";
+import { ButtonBase, type IconButtonProps } from "./ButtonBase";
 import { cx } from "@/util";
 
-interface Props {
-  className?: string;
-}
-export function ButtonRecord({ className }: Props) {
+export function ButtonRecord({ className, ...props }: IconButtonProps) {
   return (
-    <ButtonBase className={cx("group flex items-center justify-center rounded-full", className)}>
+    <ButtonBase
+      className={cx("group flex items-center justify-center rounded-full", className)}
+      {...props}
+    >
       <Fill.Record className="size-icon" />
     </ButtonBase>
   );

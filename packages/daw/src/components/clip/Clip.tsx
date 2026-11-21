@@ -1,13 +1,11 @@
 import { Dialog } from "@/ui";
 import type { ClipData } from "../../stores/types";
-import React, { useRef } from "react";
+import { useState } from "react";
 import { usePressAndHold } from "../../hooks";
 import { ClipEditor } from "./ClipEditor";
 import { useUIStore } from "../../stores/useUIStore";
-import { getTransportPosition, seek } from "../../engine/sync";
-import { useTransportStore } from "../../stores/useTransportStore";
 import { ClipContent } from "./ClipContent";
-import { useShallow } from "zustand/shallow";
+import { useClipEditor } from "./use-clip-editor";
 
 interface Pos {
   x: number;
@@ -25,40 +23,14 @@ interface Props {
   size: Size;
 }
 export function Clip({ clip, onClick, pos, size, ...props }: Props) {
-  const { setSelectedTrackId, editingClipId, setEditingClipId } = useUIStore(
-    useShallow((s) => ({
-      setSelectedTrackId: s.setSelectedTrackId,
-      editingClipId: s.editingClipId,
-      setEditingClipId: s.setEditingClipId,
-    }))
-  );
+  const { isEditing, open, close } = useClipEditor(clip);
 
-  const isEditing = useUIStore((s) => s.editingClipId === clip.id);
-
-  const [clickPos, setClickPos] = React.useState<{ x: number; y: number }>({ x: 0, y: 0 });
-
-  const transportTimeAtOpen = useRef<number>(0);
-
-  const onOpenClipEditor = () => {
-    if (useUIStore.getState().selectedTrackId !== clip.trackId) {
-      setSelectedTrackId(clip.trackId);
-    }
-    setEditingClipId(clip.id);
-    transportTimeAtOpen.current = getTransportPosition();
-    seek(clip.startTime);
-  };
-
-  const onCloseClipEditor = () => {
-    setEditingClipId(null);
-    if (!useTransportStore.getState().isPlaying) {
-      seek(transportTimeAtOpen.current);
-    }
-  };
+  const [clickPos, setClickPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
   const pressAndHoldProps = usePressAndHold(
     (event) => {
       setClickPos({ x: event.pageX, y: event.pageY });
-      onOpenClipEditor();
+      open();
     },
     { threshold: 300 }
   );
@@ -68,7 +40,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
       <Dialog.Trigger asChild>
         <ClipContent
           title="Click to remove"
-          onClick={() => onClick(clip, !!editingClipId)}
+          onClick={() => onClick(clip, useUIStore.getState().editingClipId !== null)}
           {...pressAndHoldProps}
           className="absolute h-18 cursor-pointer overflow-hidden bg-slate-700/80 transition-colors delay-100 duration-300 hover:bg-slate-500/80 active:bg-slate-400/80"
           style={{
@@ -83,7 +55,7 @@ export function Clip({ clip, onClick, pos, size, ...props }: Props) {
         portalContainer={document.getElementById("main")}
       >
         <ClipEditor
-          onCloseClick={onCloseClipEditor}
+          onCloseClick={close}
           clip={clip}
           style={{ transformOrigin: `${clickPos.x}px ${clickPos.y}px` }}
         />

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { addTrack, pause, play, stop } from "../../engine/sync";
 import { useTransportStore } from "../../stores/useTransportStore";
 import { useProjectStore } from "../../stores/useProjectStore";
@@ -6,7 +5,6 @@ import { useProjectStore } from "../../stores/useProjectStore";
 export function TransportBar() {
   const isPlaying = useTransportStore((s) => s.isPlaying);
   const bpm = useProjectStore((s) => s.bpm);
-  const [nextTrackNumber, setNextTrackNumber] = useState(1);
   return (
     <div className="flex h-22 shrink-0 items-center border-b border-slate-800 px-4">
       <div className="flex flex-col">
@@ -37,8 +35,7 @@ export function TransportBar() {
         <button
           type="button"
           onClick={() => {
-            addTrack(`Track ${nextTrackNumber}`);
-            setNextTrackNumber((n) => n + 1);
+            addTrack();
           }}
           className="rounded bg-slate-800 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-700"
         >

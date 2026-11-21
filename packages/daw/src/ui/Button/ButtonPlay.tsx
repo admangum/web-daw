@@ -1,16 +1,12 @@
 import { Fill } from "@/ui/icons";
-import { ButtonBase } from "./ButtonBase";
+import { ButtonBase, type IconButtonProps } from "./ButtonBase";
 import { cx } from "@/util";
 
-interface Props {
-  className?: string;
-  onClick?: () => void;
-}
-export function ButtonPlay({ className, onClick }: Props) {
+export function ButtonPlay({ className, ...props }: IconButtonProps) {
   return (
     <ButtonBase
       className={cx("group flex items-center justify-center rounded-full", className)}
-      onClick={onClick}
+      {...props}
     >
       <Fill.Play className="size-icon" />
     </ButtonBase>
